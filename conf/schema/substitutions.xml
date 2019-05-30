@@ -1,0 +1,8 @@
+<!ENTITY pre_tokenization_character_substitution
+        '<charFilter class="solr.MappingCharFilterFactory" mapping="character_and_symbol_substitutions.txt"/>'
+>
+
+<!ENTITY overylay_post_tokenization_synonyms
+        '<filter class="solr.SynonymFilterFactory" synonyms="schema/synonyms" ignoreCase="true" expand="true"/>'
+>
+
