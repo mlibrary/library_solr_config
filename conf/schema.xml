@@ -3,6 +3,52 @@
 
 <!DOCTYPE schema [
 
+    <!--  =====================================================
+          LOCAL FIELD DEFINITIONS, DYNAMIC FIELDS,
+          ETC.
+          =====================================================
+
+          If you want to keep this generic setup separate from
+          your core-specific stuff, you might want to keep
+          them in loaded files outside of this git repo.
+
+          By default, we load them up from schema/local_explicit_fields.xml,
+          schema/local_fieldtypes.xml, and schema/local_dynamic_fields.xml, all
+          of which are shipped as empty.
+
+          You can edit those files directly, or change the below
+          paths to something else.
+
+          Entity expansion in XML is *not* order-dependent, so you can
+          use any of the entities declared here in the local files.
+
+          KEEP IN MIND that if you want to override any of the
+          basic field types (e.g., 'text') you need to eliminate them
+          from the shipped config OR replace them via the
+          schema API (which this whole thing should be switched to...)
+       -->
+
+    <!ENTITY local_fieldtypes SYSTEM "schema/local_fieldtypes.xml">
+    <!ENTITY local_explicit_fields SYSTEM "schema/local_explicit_fields.xml">
+    <!ENTITY local_dynamic_fields SYSTEM "schema/local_dynamic_fields.xml">
+
+    <!-- Which stemmer to use when using a stemmer? If you set this to the
+         empty string, no stemming will happen even where it normally would
+    -->
+
+    <!-- <!ENTITY stem '&stem_with_porter_stemmer;'> -->
+    <!ENTITY stem '&stem_with_kstemmer;'>
+
+    <!-- Definition of the required ID type -->
+    <!ENTITY id_type 'string'>
+    <!ENTITY id_stored 'true'>
+
+    <!-- ======================================================
+         END OF THE STUFF YOU WOULD NORMALLY EDIT
+         ====================================================== -->
+
+
+
     <!-- basic, primative types (int, float, string, etc.) -->
     <!ENTITY primative_types SYSTEM "schema/primative_types.xml">
 
@@ -49,12 +95,26 @@
     '>
 
     <!-- stemming -->
+    <!-- KStem lists taken from http://lexicalresearch.com/software.html -->
+    <!-- Note we don't need to pull in the headwords, since they're hardcoded (!) in.
+         See the eight files at https://github.com/apache/lucene-solr/tree/master/lucene/analysis/common/src/java/org/apache/lucene/analysis/en
+     -->
+
     <!ENTITY use_stemmer_dictionary '
-      <filter class="solr.StemmerOverrideFilterFactory" dictionary="schema/stemming/stemdict.tsv" />
+     <filter class="solr.KeywordMarkerFilterFactory" protected="schema/stemming/stemmer_overrides/e_exception_words.txt" />
+     <filter class="solr.KeywordMarkerFilterFactory" protected="schema/stemming/stemmer_overrides/proper_nouns.txt" />
+     <filter class="solr.KeywordMarkerFilterFactory" protected="schema/stemming/stemmer_overrides/dict_supplement.txt" />
+
+      <filter class="solr.StemmerOverrideFilterFactory" dictionary="schema/stemming/stemmer_overrides/country_nationality.txt" />
+      <filter class="solr.StemmerOverrideFilterFactory" dictionary="schema/stemming/stemmer_overrides/direct_conflations.txt" />
     '>
 
+    <!ENTITY stem_with_porter_stemmer '
+      <filter class="solr.PorterStemFilterFactory"/>
+    '>
 
     <!ENTITY stem_with_kstemmer '
+        &use_stemmer_dictionary;
         <filter class="solr.KStemFilterFactory"/>
     '>
 
@@ -76,7 +136,7 @@
 
     <!ENTITY expand_synonyms_at_query_time '
         <filter class="solr.SynonymGraphFilterFactory" synonyms="schema/synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.FlattenGraphFilterFactory"/>
+
     '>
 
     <!-- Normalization and case folding -->
@@ -105,8 +165,6 @@
     <!-- Tokenizing -->
     <!ENTITY tokenize_with_icu '
       <tokenizer class="solr.ICUTokenizerFactory"/>
-       &overlay_token_copies_for_later_processing;
-
     '>
 
     <!ENTITY tokenize_on_slash '
@@ -120,19 +178,12 @@
 
     <!-- Some useful repeated chains -->
 
-    <!ENTITY stem '
-      &use_stemmer_dictionary;
-      &stem_with_kstemmer;
-    '>
-
 
     <!ENTITY standard_tokenization '
       &pre_tokenization_case_folding;
       &pre_tokenization_character_substitution;
       &tokenize_with_icu;
       &trim_leading_and_trailing_whitespace;
-      &overlay_token_copies_for_later_processing;
-      &keyword_aware_icu_case_folding_and_normalization;
       &normalize_numeric_digits;
      '>
 
@@ -141,7 +192,6 @@
       &pre_tokenization_character_substitution;
       &tokenize_into_one_big_token;
       &trim_leading_and_trailing_whitespace;
-      &overlay_token_copies_for_later_processing;
       &keyword_aware_icu_case_folding_and_normalization;
       &normalize_numeric_digits;
     '>
@@ -172,6 +222,12 @@
     <!-- Load up the primative field types -->
     &primative_types;
 
+
+    <!-- load up any local additions -->
+    &local_fieldtypes;
+    &local_dynamic_fields;
+    &local_explicit_fields;
+
     <!-- define a basic, forgiving text type with stemming and synonyms
 
     We only expand synonyms at query time, since we don't need them  in both
@@ -183,6 +239,7 @@
         <analyzer type="index">
             &standard_tokenization;
             &stem;
+            &keyword_aware_icu_case_folding_and_normalization;
             &try_to_deal_with_cjk;
             &remove_duplicates_at_same_position;
         </analyzer>
@@ -190,6 +247,9 @@
             &standard_tokenization;
             &expand_synonyms_at_query_time;
             &stem;
+            &overlay_token_copies_for_later_processing;
+            &keyword_aware_icu_case_folding_and_normalization;
+            &try_to_deal_with_cjk;
             &remove_duplicates_at_same_position;
         </analyzer>
     </fieldType>
@@ -213,6 +273,8 @@
             &spaceify_dash_and_colon;
             &remove_all_punctuation;
             &trim_leading_and_trailing_whitespace;
+            &overlay_token_copies_for_later_processing;
+            &keyword_aware_icu_case_folding_and_normalization;
         </analyzer>
     </fieldType>
 
@@ -222,14 +284,12 @@
         <analyzer>
             &pre_tokenization_case_folding;
             &pre_tokenization_character_substitution;
-            <charFilter class="solr.PatternReplaceCharFilterFactory"
-                        pattern="^\p{Punct}*(.)(.*?)\p{Punct}*$"
-                        replacement="$1$1$1$2"/>
             &tokenize_with_icu;
+            &stem;
             &overlay_token_copies_for_later_processing;
             &keyword_aware_icu_case_folding_and_normalization;
-            &normalize_numeric_digits;
-            &stem;
+            &try_to_deal_with_cjk;
+            <filter class="edu.umich.lib.solr_filters.LeftAnchorifyFilterFactory"/>
             &remove_duplicates_at_same_position;
         </analyzer>
     </fieldType>
@@ -296,7 +356,7 @@
       in a compatible way. Any analysis applied to the <uniqueKey> should _not_ produce multiple
       tokens
     -->
-    <field name="id" type="string" indexed="true" stored="true"
+    <field name="id" type="&id_type;" indexed="true" stored="&id_stored;"
            required="true"
            multiValued="false"/>
 
