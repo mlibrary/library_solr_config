@@ -1,5 +1,4 @@
 u.s.a., u.s.a, u.s., u.s,usa
-us,usa
 jr,junior
 sr,senior
 esq, esquire
