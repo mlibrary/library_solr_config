@@ -1,6 +1,5 @@
 # NOTE THAT EVERYTHING IS LOWERCASE!
-# You'll want to put this after a case folder, e.g.,
-# <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
+# You'll want to put this BEFORE case folding
 
 
 # Stupid smart-quotes and MS Word characters
@@ -37,8 +36,8 @@
 
 # History
 
-"wwi" => "world war one"
-"wwii" => "world war two"
+"WWI" => "world war one"
+"WWII" => "world war two"
 
 # Science and Math
 "±" => "plusorminus"
@@ -78,54 +77,54 @@
 "f#" => "fsharp"
 "g#" => "gsharp"
 
-"a sharp" => "asharp"
-"b sharp" => "bsharp"
-"c sharp" => "csharp"
-"d sharp" => "dsharp"
-"e sharp" => "esharp"
-"f sharp" => "fsharp"
-"g sharp" => "gsharp"
+"A sharp" => "asharp"
+"B sharp" => "bsharp"
+"C sharp" => "csharp"
+"D sharp" => "dsharp"
+"E sharp" => "esharp"
+"F sharp" => "fsharp"
+"G sharp" => "gsharp"
 
-"a-sharp" => "asharp"
-"b-sharp" => "bsharp"
-"c-sharp" => "csharp"
-"d-sharp" => "dsharp"
-"e-sharp" => "esharp"
-"f-sharp" => "fsharp"
-"g-sharp" => "gsharp"
+"A-sharp" => "asharp"
+"B-sharp" => "bsharp"
+"C-sharp" => "csharp"
+"D-sharp" => "dsharp"
+"E-sharp" => "esharp"
+"F-sharp" => "fsharp"
+"G-sharp" => "gsharp"
 
-"a♭" => "aflat"
-"b♭" => "bflat"
-"c♭" => "cflat"
-"d♭" => "dflat"
-"e♭" => "eflat"
-"f♭" => "fflat"
-"g♭" => "gflat"
+"A♭" => "aflat"
+"B♭" => "bflat"
+"C♭" => "cflat"
+"D♭" => "dflat"
+"E♭" => "eflat"
+"F♭" => "fflat"
+"G♭" => "gflat"
 
-"a-flat" => "aflat"
-"b-flat" => "bflat"
-"c-flat" => "cflat"
-"d-flat" => "dflat"
-"e-flat" => "eflat"
-"f-flat" => "fflat"
-"g-flat" => "gflat"
+"A-flat" => "aflat"
+"B-flat" => "bflat"
+"C-flat" => "cflat"
+"D-flat" => "dflat"
+"E-flat" => "eflat"
+"F-flat" => "fflat"
+"G-flat" => "gflat"
 
 
-"a♮" => "anatural"
-"b♮" => "bnatural"
-"c♮" => "cnatural"
-"d♮" => "dnatural"
-"e♮" => "enatural"
-"f♮" => "fnatural"
-"g♮" => "gnatural"
+"A♮" => "anatural"
+"B♮" => "bnatural"
+"C♮" => "cnatural"
+"D♮" => "dnatural"
+"E♮" => "enatural"
+"F♮" => "fnatural"
+"G♮" => "gnatural"
 
-"a-natural" => "anatural"
-"b-natural" => "bnatural"
-"c-natural" => "cnatural"
-"d-natural" => "dnatural"
-"e-natural" => "enatural"
-"f-natural" => "fnatural"
-"g-natural" => "gnatural"
+"A-natural" => "anatural"
+"B-natural" => "bnatural"
+"C-natural" => "cnatural"
+"D-natural" => "dnatural"
+"E-natural" => "enatural"
+"F-natural" => "fnatural"
+"G-natural" => "gnatural"
 
 
 
