@@ -170,3 +170,6 @@
 <copyField source="enum_publishDate" dest="enum_publishDateRange"/>
 
 
+<!-- weird placeholders -->
+<field name="available_online" type="string" indexed="true" stored="true"/>
+<field name="search_only" type="string" indexed="true" stored="true"/>
