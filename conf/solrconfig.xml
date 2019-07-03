@@ -464,7 +464,8 @@
        <str name="defType">edismax</str>
        <str name="echoParams">all</str>
        <float name="tie">0.01</float>
-       <bool name="lowercaseOperators">false</bool>
+          <bool name="lowercaseOperators">false</bool>
+          <bool name="sow">false</bool>
       </lst>
     </requestHandler>
 
