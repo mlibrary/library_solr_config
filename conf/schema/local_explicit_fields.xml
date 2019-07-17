@@ -52,11 +52,13 @@
 
 <field name="callnumber"    type="exactish"       indexed="true" stored="true"  multiValued="true"/>
 <field name="sudoc"         type="exactish"       indexed="true" stored="true"  multiValued="true"/>
-<field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="true"  multiValued="true"/>
 <field name="callnosearch"    type="lc_callnumber_searchable"  indexed="true" stored="true"  multiValued="true"/>
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
-<copyField source="callnumber" dest="callnosort"/>
+
 <copyField source="callnumber" dest="callnosearch"/>
+
+<field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="true"  multiValued="false"/>
+
 
     <!-- Misc fields -->
 
