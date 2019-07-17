@@ -83,7 +83,9 @@
 
 <copyField source="author" dest="authorStr"/>
 
+<!-- Mixed title/author -->
 
+<field name="title_author" type="text" indexed="true" stored="true" multiValued="true"/>
     <!-- Title fields -->
 
 <field name="titleSort"        type="exactish" indexed="true"  stored="true" multiValued="false"/>
