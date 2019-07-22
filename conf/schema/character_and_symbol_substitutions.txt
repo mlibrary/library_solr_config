@@ -33,10 +33,6 @@
 
 ".net" => "dotnet"
 
-# History
-
-"WWI", "WW1", "world war one"
-"WWII", "WW2", ""world war two"
 
 # Science and Math
 "±" => "plusorminus"
