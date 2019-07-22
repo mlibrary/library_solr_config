@@ -28,7 +28,6 @@
 "&" => " and "
 "@" => " at "
 
-
 # Programming
 "+" => "plus"
 
@@ -36,8 +35,8 @@
 
 # History
 
-"WWI" => "world war one"
-"WWII" => "world war two"
+"WWI", "WW1", "world war one"
+"WWII", "WW2", ""world war two"
 
 # Science and Math
 "±" => "plusorminus"
