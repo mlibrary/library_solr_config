@@ -276,6 +276,7 @@
             &icu_downcase;
             &stem;
             &overlay_keyword_token_copies_for_later_processing;
+            &remove_english_posessives;
             &keyword_aware_icu_normalization;
             &try_to_deal_with_cjk;
             &remove_duplicates_at_same_position;
@@ -287,6 +288,7 @@
             &expand_synonyms_at_query_time_must_come_before_overlay_or_stemming;
             &stem;
             &overlay_keyword_token_copies_for_later_processing;
+            &remove_english_posessives;
             &keyword_aware_icu_normalization;
             &try_to_deal_with_cjk;
             &remove_duplicates_at_same_position;
@@ -307,6 +309,7 @@
         <analyzer>
             &standard_tokenization;
             &overlay_keyword_token_copies_for_later_processing;
+            &remove_english_posessives;	    
             &keyword_aware_icu_normalization;
             &try_to_deal_with_cjk;
             &remove_duplicates_at_same_position;
@@ -348,6 +351,7 @@
             &tokenize_with_icu;
             &stem;
             &overlay_keyword_token_copies_for_later_processing;
+            &remove_english_posessives;
             &keyword_aware_icu_normalization;
             &try_to_deal_with_cjk;
             <filter class="edu.umich.lib.solr_filters.LeftAnchorifyFilterFactory"/>
