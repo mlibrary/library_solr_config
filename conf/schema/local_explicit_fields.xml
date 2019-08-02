@@ -3,8 +3,6 @@
 
 <!-- TEST -->
 
-<field name="etest" type="exactish_test" indexed="true" stored="true"/>
-
 <!-- Core Fields  -->
 
 <field name="id_int"          type="long"      indexed="true" stored="true"/>
@@ -99,8 +97,8 @@
 <field name="title_l"          type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="vtitle"           type="string"        indexed="false" stored="true" multiValued="false" />
 <field name="titleProper"      type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
-<field name="title_a"          type="exactish_test"  indexed="true"  stored="true" multiValued="true"/>
-<field name="title_ab"         type="exactish_test"  indexed="true"  stored="true" multiValued="true"/>
+<field name="title_a"          type="exactish"  indexed="true"  stored="true" multiValued="true"/>
+<field name="title_ab"         type="exactish"  indexed="true"  stored="true" multiValued="true"/>
 <field name="title_c"          type="string"        indexed="false" stored="true" multiValued="true"/>
 <field name="title_top"        type="text"          indexed="true"  stored="true" multiValued="true" />
 <field name="title_top_l"      type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
@@ -108,7 +106,8 @@
 <field name="title_restProper" type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
 <field name="title_rest"       type="text"          indexed="true"  stored="true" multiValued="true" />
 
-<field name="title_ab_exact"    type="exactish"  indexed="true"  stored="false" multiValued="true"/>
+<field name="title_ab_exact"    type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
+<field name="title_a_exact"     type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 
 <field name="series"          type="text"          indexed="true" stored="true" multiValued="true"/>
 <field name="series2"         type="text"          indexed="true" stored="true" multiValued="true"/>
@@ -119,8 +118,9 @@
 <copyField source="title_top"  dest="title_topProper"/>
 <copyField source="title_top"  dest="title_top_l"/>
 
-<copyField source="title_rest" dest="title_restProper"/>
+<copyField source="title_rest"    dest="title_restProper"/>
 <copyField source="title_ab"      dest="title_ab_exact"/>
+<copyField source="title_a"       dest="title_a_exact"/>
 
 <field name="serialTitle_ab"    type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle_a"     type="exactish" indexed="true" stored="true" multiValued="true"/>
