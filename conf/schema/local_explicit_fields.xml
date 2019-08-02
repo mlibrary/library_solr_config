@@ -1,6 +1,10 @@
 <!-- This fine included so attempts to import the default
      filename in schema.xml don't blow up -->
 
+<!-- TEST -->
+
+<field name="etest" type="exactish_test" indexed="true" stored="true"/>
+
 <!-- Core Fields  -->
 
 <field name="id_int"          type="long"      indexed="true" stored="true"/>
@@ -95,8 +99,8 @@
 <field name="title_l"          type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="vtitle"           type="string"        indexed="false" stored="true" multiValued="false" />
 <field name="titleProper"      type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
-<field name="title_a"          type="exactish"  indexed="true"  stored="true" multiValued="true"/>
-<field name="title_ab"         type="exactish"  indexed="true"  stored="true" multiValued="true"/>
+<field name="title_a"          type="exactish_test"  indexed="true"  stored="true" multiValued="true"/>
+<field name="title_ab"         type="exactish_test"  indexed="true"  stored="true" multiValued="true"/>
 <field name="title_c"          type="string"        indexed="false" stored="true" multiValued="true"/>
 <field name="title_top"        type="text"          indexed="true"  stored="true" multiValued="true" />
 <field name="title_top_l"      type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
