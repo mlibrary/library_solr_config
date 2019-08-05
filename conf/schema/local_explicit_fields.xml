@@ -3,6 +3,8 @@
 
 <!-- TEST -->
 
+<field name="title_left" type="left_anchored" indexed="true" stored="true"/>
+
 <!-- Core Fields  -->
 
 <field name="id_int"          type="long"      indexed="true" stored="true"/>
