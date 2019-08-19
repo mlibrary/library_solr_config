@@ -422,7 +422,8 @@
 
     <fieldType name="lc_callnumber_sortable" class="solr.TextField">
         <analyzer>
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
+          <tokenizer class="solr.KeywordTokenizerFactory"/>
+	  &trim_leading_and_trailing_whitespace;
             <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
         </analyzer>
     </fieldType>
@@ -430,7 +431,8 @@
 
     <fieldType name="lc_callnumber_searchable" class="solr.TextField"  docValues="false">
         <analyzer type="index">
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
+          <tokenizer class="solr.KeywordTokenizerFactory"/>
+      	  &trim_leading_and_trailing_whitespace;
             <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
             <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40"/>
         </analyzer>
