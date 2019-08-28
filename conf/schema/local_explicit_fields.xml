@@ -108,10 +108,11 @@
 <field name="title_rest"       type="text"          indexed="true"  stored="true" multiValued="true" />
 
 <field name="title_common"     type="text"  indexed="true" stored="true" multiValued="true"/>
+<field name="title_equiv"      type="text"  indexed="true" stored="true" multiValued="true"/>
 
 <field name="title_ab_exact"    type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 <field name="title_a_exact"     type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
-<field name="title_common_exact" type="fully_anchored" indexed="true"  stored="false" multiValued="true"/>
+<field name="title_equiv_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 
 <field name="series"          type="text"          indexed="true" stored="true" multiValued="true"/>
 <field name="series2"         type="text"          indexed="true" stored="true" multiValued="true"/>
@@ -124,7 +125,7 @@
 
 <copyField source="title_rest"    dest="title_restProper"/>
 
-<copyField source="title_common"  dest="title_common_exact"/>
+<copyField source="title_equiv"  dest="title_equiv_exact"/>
 <copyField source="title_ab"      dest="title_ab_exact"/>
 <copyField source="title_a"       dest="title_a_exact"/>
 
