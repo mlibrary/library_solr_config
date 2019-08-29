@@ -54,12 +54,12 @@
 
 <field name="callnumber"    type="exactish"       indexed="true" stored="true"  multiValued="true"/>
 <field name="sudoc"         type="exactish"       indexed="true" stored="true"  multiValued="true"/>
-<field name="callnosearch"    type="lc_callnumber_searchable"  indexed="true" stored="true"  multiValued="true"/>
+<field name="callnosearch"    type="lc_callnumber_searchable"  indexed="true" stored="false"  multiValued="true"/>
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
 
 <copyField source="callnumber" dest="callnosearch"/>
 
-<field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="true"  multiValued="false"/>
+<field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="false"  multiValued="false"/>
 
 
     <!-- Misc fields -->
@@ -89,11 +89,11 @@
 
 <!-- Mixed title/author -->
 
-<field name="title_author" type="text" indexed="true" stored="true" multiValued="true"/>
+<field name="title_author" type="text" indexed="true" stored="false" multiValued="true"/>
 
 <!-- Title fields -->
 
-<field name="titleSort"        type="exactish" indexed="true"  stored="true" multiValued="false"/>
+<field name="titleSort"        type="exactish" indexed="true"  stored="false" multiValued="false"/>
 <field name="title"            type="text"          indexed="true"  stored="true"  multiValued="true" />
 <field name="title_l"          type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="vtitle"           type="string"        indexed="false" stored="true" multiValued="false" />
