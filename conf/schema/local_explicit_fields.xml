@@ -108,7 +108,7 @@
 <field name="title_rest"       type="text"          indexed="true"  stored="true" multiValued="true" />
 
 <field name="title_common"     type="text"  indexed="true" stored="true" multiValued="true"/>
-<field name="title_equiv"      type="text"  indexed="true" stored="true" multiValued="true"/>
+<field name="title_equiv"      type="text"  indexed="true" stored="true" multiValued="true" omitNorms="true"/>
 
 <field name="title_ab_exact"    type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 <field name="title_a_exact"     type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
