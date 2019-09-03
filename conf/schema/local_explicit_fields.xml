@@ -145,9 +145,12 @@
 <field name="serialTitleProper" type="text_no_stem_or_synonyms"   indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_restProper" type="text_no_stem_or_synonyms"   indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_rest"       type="text"         indexed="true" stored="true" multiValued="true" />
+<field name="serialTitle_common_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 
 <copyField source="serialTitle" dest="serialTitleProper"/>
+<copyField source="serialTitle_common" dest="serialTitle_common_exact"/>
 <copyField source="serialTitle_common" dest="serialTitle_common_l"/>
+
     <!-- Categorization -->
 
 <field name="topic"       type="text"       indexed="true" stored="false" multiValued="true"  omitNorms="true"/>
