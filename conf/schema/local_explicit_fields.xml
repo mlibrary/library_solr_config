@@ -96,6 +96,7 @@
 <field name="titleSort"        type="exactish" indexed="true"  stored="false" multiValued="false"/>
 <field name="title"            type="text"          indexed="true"  stored="true"  multiValued="true" />
 <field name="title_l"          type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
+<field name="title_equiv_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="vtitle"           type="string"        indexed="false" stored="true" multiValued="false" />
 <field name="titleProper"      type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
 <field name="title_a"          type="exactish"  indexed="true"  stored="true" multiValued="true"/>
@@ -119,7 +120,6 @@
 <field name="series2"         type="text"          indexed="true" stored="true" multiValued="true"/>
 
 <copyField source="title"      dest="titleProper"/>
-<copyField source="title"      dest="title_l"/>
 
 <copyField source="title_top"  dest="title_topProper"/>
 <copyField source="title_top"  dest="title_top_l"/>
@@ -127,11 +127,19 @@
 <copyField source="title_rest"    dest="title_restProper"/>
 
 <copyField source="title_common"  dest="title_common_exact"/>
+<copyField source="title_common"      dest="title_l"/>
+
+
 <copyField source="title_equiv"  dest="title_equiv_exact"/>
+<copyField source="title_equiv"  dest="title_equiv_l"/>
+
+
 <copyField source="title_ab"      dest="title_ab_exact"/>
 <copyField source="title_a"       dest="title_a_exact"/>
 
+<field name="serialTitle_common"    type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle_ab"    type="exactish" indexed="true" stored="true" multiValued="true"/>
+<field name="serailTitle_common_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_a"     type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle"       type="text"         indexed="true" stored="true"  multiValued="true" />
 <field name="serialTitleProper" type="text_no_stem_or_synonyms"   indexed="true" stored="false" multiValued="true" />
@@ -139,7 +147,7 @@
 <field name="serialTitle_rest"       type="text"         indexed="true" stored="true" multiValued="true" />
 
 <copyField source="serialTitle" dest="serialTitleProper"/>
-
+<copyField source="serialTitle_common" dest="serialTitle_common_l"/>
     <!-- Categorization -->
 
 <field name="topic"       type="text"       indexed="true" stored="false" multiValued="true"  omitNorms="true"/>
