@@ -172,7 +172,8 @@
         han="true" hiragana="true  "
         katakana="false" hangul="false"
         outputUnigrams="false"
-      />
+	/>
+      <filter class="solr.FixBrokenOffsetsFilterFactory"/>
     '>
 
     <!ENTITY pre_tokenization_case_folding '
@@ -434,7 +435,7 @@
           <tokenizer class="solr.KeywordTokenizerFactory"/>
       	  &trim_leading_and_trailing_whitespace;
             <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
-            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40"/>
+            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>
         </analyzer>
         <analyzer type="query">
             <tokenizer class="solr.KeywordTokenizerFactory"/>
