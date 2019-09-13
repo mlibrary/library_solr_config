@@ -38,6 +38,7 @@
 
 <field name="ht_count"      type="int"    indexed="true"  stored="true"  multiValued="false"/>
 <field name="ht_id"         type="string"  indexed="true"  stored="true"  multiValued="true"/>
+<field name="htid" type="string" indexed="true" stored="true" multiValued="true" />
 <field name="ht_id_update"  type="int"    indexed="true"  stored="true"  multiValued="true"/>
 <field name="ht_id_display" type="string"  indexed="false" stored="true"  multiValued="true"/>
 <field name="ht_json"       type="string"  indexed="false" stored="true"  multiValued="false" docValues="false"/>
@@ -49,6 +50,8 @@
 <field name="ht_searchonly_intl"   type="boolean" indexed="true" stored="true" multiValued="false"/>
 <field name="ht_availability"      type="string"  indexed="true" stored="true" multiValued="true"/>
 <field name="ht_availability_intl" type="string"  indexed="true" stored="true" multiValued="true"/>
+
+<copyField source="ht_id" dest="htid"/>
 
     <!-- Call numbers -->
 
