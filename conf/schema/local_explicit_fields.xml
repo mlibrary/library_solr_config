@@ -96,10 +96,10 @@
 
 <!-- Title fields -->
 
-<field name="titleSort"        type="exactish" indexed="true"  stored="false" multiValued="false"/>
+<field name="title_common"     type="text"  indexed="true" stored="true" multiValued="true"/>
+<field name="title_equiv"      type="text"  indexed="true" stored="true"  multiValued="true" omitNorms="true"/>
 <field name="title"            type="text"          indexed="true"  stored="true"  multiValued="true" />
-<field name="title_l"          type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
-<field name="title_equiv_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
+<field name="titleSort"        type="exactish" indexed="true"  stored="false" multiValued="false"/>
 <field name="vtitle"           type="string"        indexed="false" stored="true" multiValued="false" />
 <field name="titleProper"      type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
 <field name="title_a"          type="exactish"  indexed="true"  stored="true" multiValued="true"/>
@@ -111,8 +111,8 @@
 <field name="title_restProper" type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
 <field name="title_rest"       type="text"          indexed="true"  stored="true" multiValued="true" />
 
-<field name="title_common"     type="text"  indexed="true" stored="true" multiValued="true"/>
-<field name="title_equiv"      type="text"  indexed="true" stored="true" multiValued="true" omitNorms="true"/>
+<field name="title_l"          type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
+<field name="title_equiv_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 
 <field name="title_ab_exact"    type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 <field name="title_a_exact"     type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
@@ -143,12 +143,13 @@
 <field name="serialTitle_common"    type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle_equiv"    type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle_ab"    type="exactish" indexed="true" stored="true" multiValued="true"/>
-<field name="serialTitle_common_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_a"     type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle"       type="text"         indexed="true" stored="true"  multiValued="true" />
 <field name="serialTitleProper" type="text_no_stem_or_synonyms"   indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_restProper" type="text_no_stem_or_synonyms"   indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_rest"       type="text"         indexed="true" stored="true" multiValued="true" />
+
+<field name="serialTitle_common_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_common_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 
 <copyField source="serialTitle" dest="serialTitleProper"/>

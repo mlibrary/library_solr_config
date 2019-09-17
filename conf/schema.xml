@@ -327,7 +327,7 @@
     -->
 
     <fieldType name="fully_anchored" class="solr.TextField"
-               positionIncrementGap="&pig;">
+               positionIncrementGap="&pig;" multiValued="true">
       <analyzer>
         &less_aggressive_pre_tokenization_character_substitution;
         &tokenize_with_icu;
