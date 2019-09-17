@@ -26,25 +26,32 @@ if [ -z $SOLR_ROOT ]; then
     else
 	defaultsolr=1
 	SOLR_ROOT="http://localhost:8025/solr"
+	SOLR_URL="${SOLR_ROOT}/$core"
     fi
 fi
 
 echo -e "\n**************************************************************"
+echo -e "\n"
+if [ ! -z ${defaultsolr+x} ] ; then
+    echo -e "\$SOLR_URL not set. Can't derive solr root"
+    echo -e "   '$SOLR_ROOT' taken from default."
+else
+    echo -e "   '$SOLR_URL' taken from \$SOLR_URL"
+fi
+
+echo -e "\n"
+if [ ! -z ${defaultcore+x} ]; then
+    echo -e "No argument given for corename"
+    echo -e "   '$core' taken from name of current directory"
+else
+    echo -e "   '$core' used as corename (from first argument)"
+fi
+
+echo -e "\n"
+echo -e "\n**************************************************************"
 echo -e "\n****  Pausing 10 seconds in case this isn't what you want **** "
 echo -e "\n**************************************************************"
-
-echo -e "\n\n${SOLR_ROOT} being targeted"
-
-if [ ! -z ${defaultsolr+x} ] ; then echo "  Solr url taken from default. Set via \$SOLR_URL"; fi
-
-echo -e "\n$core used as corename"
-if [ ! -z ${defaultcore+x} ]; then echo -e "   Corename taken from current dir.\n   Pass as arg to this script if necessary"; fi
-
-echo -e "\n**************************************************************"
-echo -e "\n****  Pausing 10 seconds in case this isn't what you want **** "
-echo -e "\n**************************************************************"
-
-echo -e "\n\n\n"
+echo -e "\n"
 
 
 
