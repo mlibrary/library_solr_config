@@ -183,12 +183,14 @@
     '>
 
 <!ENTITY try_to_parse_callnumber '
-  &icu_case_folding_and_normalization;
   <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
   &trim_leading_whitespace_and_punctuation;
   &trim_trailing_whitespace_and_punctuation;
   &remove_punctuation_next_to_a_space;
-    '>
+  &icu_case_folding_and_normalization;
+'>
+
+
 
     <!ENTITY pre_tokenization_case_folding '
       <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>

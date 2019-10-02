@@ -35,7 +35,7 @@
        that you fully re-index after changing this setting as it can
        affect both how text is indexed and queried.
   -->
-  <luceneMatchVersion>8.2.0</luceneMatchVersion>
+  <luceneMatchVersion>8.0.0</luceneMatchVersion>
 
   <!-- Data Directory
 
@@ -520,9 +520,7 @@
            query analysis is performed, the produced tokens of the
            field value analysis will be marked as "matched" for every
            token that is produces by the query analysis
-   -->
-  <requestHandler name="/analysis/field"
-                  class="solr.FieldAnalysisRequestHandler" />
+  -->
 
 
   <!-- Document Analysis Handler
@@ -555,9 +553,6 @@
     true, all field tokens that match the query tokens will be marked
     as a "match".
   -->
-  <requestHandler name="/analysis/document"
-                  class="solr.DocumentAnalysisRequestHandler"
-                  startup="lazy" />
 
   <!-- Echo the request contents back to the client -->
   <requestHandler name="/debug/dump" class="solr.DumpRequestHandler" >
