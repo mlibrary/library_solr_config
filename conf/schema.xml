@@ -89,7 +89,13 @@
     '>
 
 
+
+
     <!-- Ways to ditch stuff -->
+
+<!ENTITY remove_punctuation_next_to_a_space '
+  <filter class="solr.PatternReplaceFilterFactory" pattern="(?:\p{Z}+\p{P}+)|(?:\p{P}+\p{Z}+)" replacement=" " replace="all"/>
+'>
 
     <!ENTITY trim_leading_and_trailing_whitespace '
       <filter class="solr.TrimFilterFactory"/>
@@ -174,6 +180,14 @@
         outputUnigrams="false"
 	/>
       <filter class="solr.FixBrokenOffsetsFilterFactory"/>
+    '>
+
+<!ENTITY try_to_parse_callnumber '
+  &icu_case_folding_and_normalization;
+  <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
+  &trim_leading_whitespace_and_punctuation;
+  &trim_trailing_whitespace_and_punctuation;
+  &remove_punctuation_next_to_a_space;
     '>
 
     <!ENTITY pre_tokenization_case_folding '
@@ -424,8 +438,7 @@
     <fieldType name="lc_callnumber_sortable" class="solr.TextField">
         <analyzer>
           <tokenizer class="solr.KeywordTokenizerFactory"/>
-	  &trim_leading_and_trailing_whitespace;
-            <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
+	  &try_to_parse_callnumber;
         </analyzer>
     </fieldType>
 
@@ -433,13 +446,12 @@
     <fieldType name="lc_callnumber_searchable" class="solr.TextField"  docValues="false">
         <analyzer type="index">
           <tokenizer class="solr.KeywordTokenizerFactory"/>
-      	  &trim_leading_and_trailing_whitespace;
-            <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
+    	    &try_to_parse_callnumber;
             <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>
         </analyzer>
         <analyzer type="query">
             <tokenizer class="solr.KeywordTokenizerFactory"/>
-            <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
+    	    &try_to_parse_callnumber;
         </analyzer>
     </fieldType>
 

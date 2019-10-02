@@ -522,7 +522,6 @@
            token that is produces by the query analysis
    -->
   <requestHandler name="/analysis/field"
-                  startup="lazy"
                   class="solr.FieldAnalysisRequestHandler" />
 
 
