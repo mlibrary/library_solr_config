@@ -29,7 +29,7 @@
 <field name="ctrlnum"      type="exactish"   indexed="true" stored="true"  multiValued="true"/>
 <field name="rptnum"       type="exactish"   indexed="true" stored="true"  multiValued="true"/>
 <field name="sdrnum"       type="exactish"   indexed="true" stored="true"  multiValued="true"/>
-<field name="oclc"         type="numericID_trim_leading_zeros"        indexed="true" stored="true"  multiValued="true"/>
+<field name="oclc"         type="integer_no_leading_zeros"        indexed="true" stored="true"  multiValued="true"/>
 <field name="isbn"         type="isbn"         indexed="true" stored="true"  multiValued="true"/>
 <field name="issn"         type="numericID"         indexed="true" stored="true"  multiValued="true"/>
 <field name="isn_related"  type="numericID"         indexed="true" stored="true" multiValued="true"/>
@@ -38,6 +38,7 @@
 
 <field name="ht_count"      type="int"    indexed="true"  stored="true"  multiValued="false"/>
 <field name="ht_id"         type="string"  indexed="true"  stored="true"  multiValued="true"/>
+<field name="htid" type="string" indexed="true" stored="true" multiValued="true" />
 <field name="ht_id_update"  type="int"    indexed="true"  stored="true"  multiValued="true"/>
 <field name="ht_id_display" type="string"  indexed="false" stored="true"  multiValued="true"/>
 <field name="ht_json"       type="string"  indexed="false" stored="true"  multiValued="false" docValues="false"/>
@@ -50,16 +51,18 @@
 <field name="ht_availability"      type="string"  indexed="true" stored="true" multiValued="true"/>
 <field name="ht_availability_intl" type="string"  indexed="true" stored="true" multiValued="true"/>
 
+<copyField source="ht_id" dest="htid"/>
+
     <!-- Call numbers -->
 
 <field name="callnumber"    type="exactish"       indexed="true" stored="true"  multiValued="true"/>
 <field name="sudoc"         type="exactish"       indexed="true" stored="true"  multiValued="true"/>
-<field name="callnosearch"    type="lc_callnumber_searchable"  indexed="true" stored="true"  multiValued="true"/>
+<field name="callnosearch"    type="lc_callnumber_searchable"  indexed="true" stored="false"  multiValued="true"/>
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
 
 <copyField source="callnumber" dest="callnosearch"/>
 
-<field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="true"  multiValued="false"/>
+<field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="false"  multiValued="false"/>
 
 
     <!-- Misc fields -->
@@ -89,13 +92,14 @@
 
 <!-- Mixed title/author -->
 
-<field name="title_author" type="text" indexed="true" stored="true" multiValued="true"/>
+<field name="title_author" type="text" indexed="true" stored="false" multiValued="true"/>
 
 <!-- Title fields -->
 
-<field name="titleSort"        type="exactish" indexed="true"  stored="true" multiValued="false"/>
+<field name="title_common"     type="text"  indexed="true" stored="true" multiValued="true"/>
+<field name="title_equiv"      type="text"  indexed="true" stored="true"  multiValued="true" omitNorms="true"/>
 <field name="title"            type="text"          indexed="true"  stored="true"  multiValued="true" />
-<field name="title_l"          type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
+<field name="titleSort"        type="exactish" indexed="true"  stored="false" multiValued="false"/>
 <field name="vtitle"           type="string"        indexed="false" stored="true" multiValued="false" />
 <field name="titleProper"      type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
 <field name="title_a"          type="exactish"  indexed="true"  stored="true" multiValued="true"/>
@@ -107,17 +111,18 @@
 <field name="title_restProper" type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
 <field name="title_rest"       type="text"          indexed="true"  stored="true" multiValued="true" />
 
-<field name="title_common"     type="text"  indexed="true" stored="true" multiValued="true"/>
+<field name="title_l"          type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
+<field name="title_equiv_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 
 <field name="title_ab_exact"    type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 <field name="title_a_exact"     type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
-<field name="title_common_exact" type="fully_anchored" indexed="true"  stored="false" multiValued="true"/>
+<field name="title_common_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
+<field name="title_equiv_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 
 <field name="series"          type="text"          indexed="true" stored="true" multiValued="true"/>
 <field name="series2"         type="text"          indexed="true" stored="true" multiValued="true"/>
 
 <copyField source="title"      dest="titleProper"/>
-<copyField source="title"      dest="title_l"/>
 
 <copyField source="title_top"  dest="title_topProper"/>
 <copyField source="title_top"  dest="title_top_l"/>
@@ -125,9 +130,18 @@
 <copyField source="title_rest"    dest="title_restProper"/>
 
 <copyField source="title_common"  dest="title_common_exact"/>
+<copyField source="title_common"      dest="title_l"/>
+
+
+<copyField source="title_equiv"  dest="title_equiv_exact"/>
+<copyField source="title_equiv"  dest="title_equiv_l"/>
+
+
 <copyField source="title_ab"      dest="title_ab_exact"/>
 <copyField source="title_a"       dest="title_a_exact"/>
 
+<field name="serialTitle_common"    type="exactish" indexed="true" stored="true" multiValued="true"/>
+<field name="serialTitle_equiv"    type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle_ab"    type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle_a"     type="exactish" indexed="true" stored="true" multiValued="true"/>
 <field name="serialTitle"       type="text"         indexed="true" stored="true"  multiValued="true" />
@@ -135,7 +149,12 @@
 <field name="serialTitle_restProper" type="text_no_stem_or_synonyms"   indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_rest"       type="text"         indexed="true" stored="true" multiValued="true" />
 
+<field name="serialTitle_common_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
+<field name="serialTitle_common_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
+
 <copyField source="serialTitle" dest="serialTitleProper"/>
+<copyField source="serialTitle_common" dest="serialTitle_common_exact"/>
+<copyField source="serialTitle_common" dest="serialTitle_common_l"/>
 
     <!-- Categorization -->
 

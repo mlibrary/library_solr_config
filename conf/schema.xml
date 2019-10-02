@@ -172,7 +172,8 @@
         han="true" hiragana="true  "
         katakana="false" hangul="false"
         outputUnigrams="false"
-      />
+	/>
+      <filter class="solr.FixBrokenOffsetsFilterFactory"/>
     '>
 
     <!ENTITY pre_tokenization_case_folding '
@@ -326,7 +327,7 @@
     -->
 
     <fieldType name="fully_anchored" class="solr.TextField"
-               positionIncrementGap="&pig;">
+               positionIncrementGap="&pig;" multiValued="true">
       <analyzer>
         &less_aggressive_pre_tokenization_character_substitution;
         &tokenize_with_icu;
@@ -434,7 +435,7 @@
           <tokenizer class="solr.KeywordTokenizerFactory"/>
       	  &trim_leading_and_trailing_whitespace;
             <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
-            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40"/>
+            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>
         </analyzer>
         <analyzer type="query">
             <tokenizer class="solr.KeywordTokenizerFactory"/>
@@ -447,7 +448,7 @@
                    GENERIC NUMERIC IDENTIFIER TYPES
     ============================================================== -->
 
-    <fieldtype name="numericID" class="solr.TextField" positionIncrementGap="1000" omitNorms="true">
+    <fieldType name="numericID" class="solr.TextField" positionIncrementGap="1000" omitNorms="true">
     <analyzer>
     <tokenizer class="solr.KeywordTokenizerFactory"/>
     <filter class="solr.TrimFilterFactory"/>
@@ -459,23 +460,17 @@
     <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}x]" replacement="" replace="all"/>
     <filter class="solr.LengthFilterFactory" min="8" max="14"/>
     </analyzer>
-    </fieldtype>
+    </fieldType>
 
-    <fieldtype name="numericID_trim_leading_zeros" class="solr.TextField" positionIncrementGap="1000" omitNorms="true">
-        <analyzer>
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
-            <filter class="solr.TrimFilterFactory"/>
-            <filter class="solr.PatternReplaceFilterFactory"
-            pattern="^.*?(\p{N}[\p{N}\-\.]{6,}[xX]?).*$" replacement="***$1"/>
-            <filter class="solr.PatternReplaceFilterFactory" pattern="^[^\*].*$" replacement=""/>
-            <filter class="solr.PatternReplaceFilterFactory" pattern="^\*\*\*" replacement=""/>
-            <filter class="solr.LowerCaseFilterFactory"/>
-            <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}x]" replacement="" replace="all"/>
-            <filter class="solr.LengthFilterFactory" min="8" max="14"/>
-            <filter class="solr.PatternReplaceFilterFactory" pattern="^0*" replacement=""/>
-        </analyzer>
-    </fieldtype>
 
+    <fieldType name="integer_no_leading_zeros" class="solr.TextField" positionIncrementGap="1000" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+          <filter class="solr.TrimFilterFactory"/>
+          <filter class="solr.PatternReplaceFilterFactory"
+		  pattern="^[^\p{N}]*0*(\p{N}+).*$" replacement="$1"/>
+      </analyzer>
+    </fieldType>
 
 
 
