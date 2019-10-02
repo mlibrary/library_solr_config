@@ -34,9 +34,9 @@ echo -e "\n**************************************************************"
 echo -e "\n"
 if [ ! -z ${defaultsolr+x} ] ; then
     echo -e "\$SOLR_URL not set. Can't derive solr root"
-    echo -e "   '$SOLR_ROOT' taken from default."
+    echo -e "   Targeting '$SOLR_ROOT' taken from default."
 else
-    echo -e "   '$SOLR_URL' taken from \$SOLR_URL"
+    echo -e "   Targeting '$SOLR_ROOT'"
 fi
 
 echo -e "\n"
@@ -47,6 +47,8 @@ else
     echo -e "   '$core' used as corename (from first argument)"
 fi
 
+echo "Loading config in ${dir}"
+
 echo -e "\n"
 echo -e "\n**************************************************************"
 echo -e "\n****  Pausing 10 seconds in case this isn't what you want **** "
@@ -56,7 +58,7 @@ echo -e "\n"
 
 
 
-sleep 10
+sleep 1
 
 
 curl "${SOLR_ROOT}/admin/cores?action=CREATE&name=$core&config=solrconfig.xml&dataDir=data&instanceDir=$dir&wt=json"
