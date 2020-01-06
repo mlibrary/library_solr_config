@@ -183,6 +183,7 @@
     '>
 
 <!ENTITY try_to_parse_callnumber '
+  &remove_punctuation_next_to_a_space;
   <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>
   &trim_leading_whitespace_and_punctuation;
   &trim_trailing_whitespace_and_punctuation;
@@ -378,6 +379,23 @@
     
 
 
+    <fieldType name="exactishSort" class="solr.TextField"
+               positionIncrementGap="&pig;">
+      <analyzer>
+            &less_aggressive_pre_tokenization_character_substitution;
+            &standard_single_token_tokenizer;
+            &spaceify_dash_and_colon;
+      <filter class="solr.PatternReplaceFilterFactory"
+               pattern="'s\b" replacement="" replace="all"
+      />
+            &remove_all_punctuation;
+            &icu_case_folding_and_normalization; 
+            &try_to_deal_with_cjk;
+            &remove_duplicates_at_same_position;
+        </analyzer>
+    </fieldType>
+
+
     <fieldType name="exactish" class="solr.TextField"
                positionIncrementGap="&pig;">
       <analyzer>
@@ -394,8 +412,6 @@
             &remove_duplicates_at_same_position;
         </analyzer>
     </fieldType>
-
-
 
 
     <!-- =============================================================
