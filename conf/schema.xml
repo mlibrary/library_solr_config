@@ -392,6 +392,18 @@
             &icu_case_folding_and_normalization; 
             &try_to_deal_with_cjk;
             &remove_duplicates_at_same_position;
+      <!-- Left-pad numbers with zeroes -->
+      <filter class="solr.PatternReplaceFilterFactory"
+              pattern="(\d+)" replacement="00000$1" replace="all"
+      />
+      <!-- Left-trim zeroes to produce 6 digit numbers -->
+      <filter class="solr.PatternReplaceFilterFactory"
+              pattern="0*([0-9]{6,})" replacement="$1" replace="all"
+      />
+      <!-- squeeze multiple spaces to 1 -->
+      <filter class="solr.PatternReplaceFilterFactory"
+               pattern="\s\s+" replacement=" " replace="all"
+      />
         </analyzer>
     </fieldType>
 
