@@ -292,7 +292,7 @@
             &standard_tokenization;
             &expand_state_abbreviations;
             &icu_downcase;
-            &stem;
+            &stem; <!-- Wait!!! Esty thinks maybe this should go after overlay -->
             &overlay_keyword_token_copies_for_later_processing;
             &remove_english_posessives;
             &keyword_aware_icu_normalization;
@@ -363,12 +363,12 @@
         &remove_all_punctuation;
         &icu_downcase;
         &overlay_keyword_token_copies_for_later_processing;
-        &keyword_aware_icu_normalization;	
+        &keyword_aware_icu_normalization;
         <filter class="edu.umich.lib.solr_filters.LeftAnchoredSearchFilterFactory"/>
         &remove_duplicates_at_same_position;
       </analyzer>
     </fieldType>
-    
+
 
     <!--
         field type: exactishSort
@@ -385,7 +385,7 @@
             &standard_single_token_tokenizer;
             &spaceify_dash_and_colon;
             &remove_all_punctuation;
-            &icu_case_folding_and_normalization; 
+            &icu_case_folding_and_normalization;
             &try_to_deal_with_cjk;
             &remove_duplicates_at_same_position;
       <!-- Left-pad numbers with zeroes -->
