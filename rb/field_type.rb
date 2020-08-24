@@ -1,37 +1,24 @@
 class FieldType
+    def self.registry
+        @registry ||= []
+    end
+
+    def self.register(candidate)
+        registry.prepend(candidate)
+    end
+
     def self.get_type(name)
-        case name
-        when "binary"
-            BinaryType.new
-        when "boolean"
-            BooleanType.new
-        when "date"
-            DateType.new
-        when "double"
-            DoubleType.new
-        when "float"
-            FloatType.new
-        when "int"
-            IntType.new
-        when "long"
-            LongType.new
-        when 'string'
-            StringType.new
-        when 'facet'
-            FacetType.new
-        when 'single_date_stored'
-            SingleDateStoredType.new
-        when 'ignored'
-            IgnoredType.new
-        when 'location_rpt'
-            LocationRptType.new
-        when 'point'
-            PointType.new
-        end
+        registry.find {|candidate| candidate.handles?(name) }.new
     end
 end
 
 class BinaryType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "binary"
+    end
+
     def solr_class
         "solr.BinaryField"
     end
@@ -49,6 +36,12 @@ class BinaryType
 end
 
 class BooleanType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "boolean"
+    end
+
     def solr_class
         "solr.BoolField"
     end
@@ -70,7 +63,21 @@ class BooleanType
     end
 end
 
-class SolrTrieField
+class DateType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "date"
+    end
+
+    def solr_class
+        "solr.TrieDateField"
+    end
+
+    def name
+        "date"
+    end
+
     def precision_step
         0
     end
@@ -89,13 +96,19 @@ class SolrTrieField
     end
 end
 
-class DateType < SolrTrieField
-    def solr_class
-        "solr.TrieDateField"
+class DoubleType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "double"
     end
 
     def name
-        "date"
+        "double"
+    end
+
+    def solr_class
+        "solr.TrieDoubleField"
     end
 
     def precision_step
@@ -105,19 +118,24 @@ class DateType < SolrTrieField
     def position_increment_gap
         0
     end
+
+    def to_json
+        {
+            "class": solr_class,
+            "name": name,
+            "precisionStep": precision_step,
+            "positionIncrementGap": position_increment_gap
+        }.to_json
+    end
 end
 
-class DoubleType < SolrTrieField
-    def name
-        "double"
+class FloatType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "float"
     end
 
-    def solr_class
-        "solr.TrieDoubleField"
-    end
-end
-
-class FloatType < SolrTrieField
     def name
         "float"
     end
@@ -125,9 +143,32 @@ class FloatType < SolrTrieField
     def solr_class
         "solr.TrieFloatField"
     end
+
+    def precision_step
+        0
+    end
+
+    def position_increment_gap
+        0
+    end
+
+    def to_json
+        {
+            "class": solr_class,
+            "name": name,
+            "precisionStep": precision_step,
+            "positionIncrementGap": position_increment_gap
+        }.to_json
+    end
 end
 
-class IntType < SolrTrieField
+class IntType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "int"
+    end
+
     def name
         "int"
     end
@@ -138,6 +179,14 @@ class IntType < SolrTrieField
 
     def doc_values
         true
+    end
+
+    def precision_step
+        0
+    end
+
+    def position_increment_gap
+        0
     end
 
     def to_json
@@ -151,13 +200,27 @@ class IntType < SolrTrieField
     end
 end
 
-class LongType < SolrTrieField
+class LongType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "long"
+    end
+
     def name
         "long"
     end
 
     def solr_class
         "solr.TrieLongField"
+    end
+
+    def precision_step
+        0
+    end
+
+    def position_increment_gap
+        0
     end
 
     def doc_values
@@ -176,6 +239,12 @@ class LongType < SolrTrieField
 end
 
 class StringType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "string"
+    end
+
     def name
         "string"
     end
@@ -213,6 +282,12 @@ class StringType
 end
 
 class FacetType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "facet"
+    end
+
     def name
         "facet"
     end
@@ -250,6 +325,12 @@ class FacetType
 end
 
 class SingleDateStoredType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "single_date_stored"
+    end
+
     def name
         "single_date_stored"
     end
@@ -287,6 +368,12 @@ class SingleDateStoredType
 end
 
 class IgnoredType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "ignored"
+    end
+
     def solr_class
         "solr.StrField"
     end
@@ -319,6 +406,12 @@ class IgnoredType
 end
 
 class LocationRptType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "location_rpt"
+    end
+
     def name
         "location_rpt"
     end
@@ -356,6 +449,12 @@ class LocationRptType
 end
 
 class PointType
+    FieldType.register(self)
+
+    def self.handles?(name)
+        name == "point"
+    end
+
     def solr_class
         "solr.PointType"
     end
