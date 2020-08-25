@@ -17,4 +17,27 @@ class ComplexTypesTest < Minitest::Test
             }
         }
     end
+
+    def test_isbn_type
+        field_type = FieldType.get_type('isbn')
+        assert_equal field_type.to_json, {
+            "name": "isbn",
+            "class": "solr.TextField",
+            "analyzer": {
+                "tokenizer": {
+                    "class": "solr.PatternTokenizerFactory",
+                    "pattern": "[;,]\s*"
+                },
+                "filter": [
+                    { "class": "edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory" },
+                    { "class": "solr.RemoveDuplicatesTokenFilterFactory" },
+                    {
+                        "class": "solr.LengthFilterFactory",
+                        "min": 13,
+                        "max": 13
+                    }
+                ]
+            }
+        }
+    end
 end
