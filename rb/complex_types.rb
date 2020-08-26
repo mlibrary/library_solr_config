@@ -1,33 +1,6 @@
 require_relative 'field_type'
 require_relative 'filter'
-
-class Tokenizer
-    def solr_class
-        "solr.KeywordTokenizerFactory"
-    end
-
-    def to_json
-        { "class": solr_class }
-    end
-end
-
-class PatternTokenizer
-    attr_accessor :pattern
-    def initialize(pattern)
-        @pattern = pattern
-    end
-
-    def solr_class
-        "solr.PatternTokenizerFactory"
-    end
-
-    def to_json
-        {
-            "class": solr_class,
-            "pattern": pattern
-        }
-    end
-end
+require_relative 'tokenizer'
 
 class Analyzer
     attr_accessor :name
@@ -59,8 +32,8 @@ class ISBNAnalyzer < Analyzer
 
     def filter
         [
-            Filter.get_filter(name).new,
-            Filter.get_filter('remove_duplicates_at_same_position').new,
+            Filter.new("edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory"),
+            Filter.new("solr.RemoveDuplicatesTokenFilterFactory"),
             Filter.get_filter('length').new(max=13, min=13)
         ]
     end
@@ -81,11 +54,11 @@ class ParseCallNumberAnalyzer
     def filter
         [
             PatternReplaceFilter.new(pattern="(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)", replacement=" ", replace="all"),
-            Filter.get_filter("lc_call_number").new,
+            Filter.new("edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"),
             PatternReplaceFilter.new(pattern="^[\\p{P}\\p{Z}]+", replacement="", replace="all"),
             PatternReplaceFilter.new(pattern="[\\p{P}\\p{Z}]+$", replacement="", replace="all"),
             PatternReplaceFilter.new(pattern="(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)", replacement=" ", replace="all"),
-            Filter.get_filter("icu_case_folding").new
+            Filter.new("solr.ICUFoldingFilterFactory")
         ]
     end
 

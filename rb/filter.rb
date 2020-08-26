@@ -1,48 +1,31 @@
 class Filter
     def self.registry
-        @registry ||= []
+        @registry ||= [Filter]
     end
 
     def self.register(candidate)
         registry.prepend(candidate)
     end
 
-    def self.get_filter(name)
+    def self.get_filter(name=nil)
         registry.find {|candidate| candidate.handles?(name) }
     end
-end
 
-class BaseFilter
+    def self.handles?(name)
+        true
+    end
+
+    attr_accessor :solr_class
+    def initialize(solr_class=nil)
+        @solr_class = solr_class
+    end
+
     def to_json
         { "class": solr_class }
     end
 end
 
-class RemoveDuplicatesFilter < BaseFilter
-    Filter.register(self)
-
-    def self.handles?(name)
-        name == "remove_duplicates_at_same_position"
-    end
-
-    def solr_class
-        "solr.RemoveDuplicatesTokenFilterFactory"
-    end
-end
-
-class ISBNFilter < BaseFilter
-    Filter.register(self)
-
-    def self.handles?(name)
-        name == "isbn"
-    end
-
-    def solr_class
-        "edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory"
-    end
-end
-
-class LCCNFilter < BaseFilter
+class LCCNFilter < Filter
     Filter.register(self)
 
     def self.handles?(name)
@@ -51,30 +34,6 @@ class LCCNFilter < BaseFilter
 
     def solr_class
         "edu.umich.lib.solr_filters.LCCNNormalizerFilterFactory"
-    end
-end
-
-class LCCallNumberFilter < BaseFilter
-    Filter.register(self)
-    
-    def self.handles?(name)
-        name == "lc_call_number"
-    end
-
-    def solr_class
-        "edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"
-    end
-end
-
-class ICUFoldingFilter < BaseFilter
-    Filter.register(self)
-
-    def self.handles?(name)
-        name == "icu_case_folding"
-    end
-
-    def solr_class
-        "solr.ICUFoldingFilterFactory"
     end
 end
 
