@@ -90,3 +90,16 @@ class PatternReplaceFilter
         }
     end
 end
+
+class ParseCallNumberFilter
+    def sub_filters
+        [
+            PatternReplaceFilter.new(pattern="(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)", replacement=" ", replace="all"),
+            Filter.new("edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"),
+            PatternReplaceFilter.new(pattern="^[\\p{P}\\p{Z}]+", replacement="", replace="all"),
+            PatternReplaceFilter.new(pattern="[\\p{P}\\p{Z}]+$", replacement="", replace="all"),
+            PatternReplaceFilter.new(pattern="(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)", replacement=" ", replace="all"),
+            Filter.new("solr.ICUFoldingFilterFactory")
+        ]
+    end
+end

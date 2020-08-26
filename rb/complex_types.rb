@@ -52,14 +52,7 @@ class ParseCallNumberAnalyzer
     end
 
     def filter
-        [
-            PatternReplaceFilter.new(pattern="(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)", replacement=" ", replace="all"),
-            Filter.new("edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"),
-            PatternReplaceFilter.new(pattern="^[\\p{P}\\p{Z}]+", replacement="", replace="all"),
-            PatternReplaceFilter.new(pattern="[\\p{P}\\p{Z}]+$", replacement="", replace="all"),
-            PatternReplaceFilter.new(pattern="(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)", replacement=" ", replace="all"),
-            Filter.new("solr.ICUFoldingFilterFactory")
-        ]
+        [].append(ParseCallNumberFilter.new.sub_filters).flatten
     end
 
     def to_json
