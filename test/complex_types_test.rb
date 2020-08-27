@@ -11,9 +11,9 @@ class ComplexTypesTest < Minitest::Test
                 "tokenizer": {
                     "class": "solr.KeywordTokenizerFactory"
                 },
-                "filter": {
+                "filters": [{
                     "class": "edu.umich.lib.solr_filters.LCCNNormalizerFilterFactory"
-                }
+                }]
             }
         }
     end
@@ -27,7 +27,7 @@ class ComplexTypesTest < Minitest::Test
                 "tokenizer": {
                     "class": "solr.KeywordTokenizerFactory"
                 },
-                "filter": [
+                "filters": [
                     {
                         "class": "solr.PatternReplaceFilterFactory",
                         "pattern": "(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)",
@@ -73,7 +73,7 @@ class ComplexTypesTest < Minitest::Test
                     "class": "solr.PatternTokenizerFactory",
                     "pattern": "[;,]\s*"
                 },
-                "filter": [
+                "filters": [
                     { "class": "edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory" },
                     { "class": "solr.RemoveDuplicatesTokenFilterFactory" },
                     {
