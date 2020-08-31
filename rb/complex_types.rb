@@ -13,24 +13,24 @@ class Analyzer
         Tokenizer.new
     end
 
-    def filters
+    def filter
         Array(Filter.get_filter(name).new)
     end
 
     def to_json
         {
             "tokenizer": tokenizer.to_json,
-            "filters": filters.map { |filt| filt.to_json }
+            "filter": filter.map { |filt| filt.to_json }
         }
     end
 end
 
 class ISBNAnalyzer < Analyzer
     def tokenizer
-        PatternTokenizer.new("[;,]\s*")
+        PatternTokenizer.new("[;,]\\s*")
     end
 
-    def filters
+    def filter
         [
             Filter.new("edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory"),
             Filter.new("solr.RemoveDuplicatesTokenFilterFactory"),
@@ -41,7 +41,7 @@ class ISBNAnalyzer < Analyzer
     def to_json
         {
             "tokenizer": tokenizer.to_json,
-            "filters": filters.map { |filt| filt.to_json }
+            "filter": filter.map { |filt| filt.to_json }
         }
     end
 end
@@ -51,14 +51,14 @@ class ParseCallNumberAnalyzer
         Tokenizer.new
     end
 
-    def filters
+    def filter
         [].append(ParseCallNumberFilter.new.sub_filters).flatten
     end
 
     def to_json
         {
             "tokenizer": tokenizer.to_json,
-            "filters": filters.map { |filt| filt.to_json }
+            "filter": filter.map { |filt| filt.to_json }
         }
     end
 end
