@@ -27,7 +27,60 @@ class SchemaTest < Minitest::Test
                             }
                         ]
                     }
-                }
+                },
+                {
+                    "name": "lccn",
+                    "class": "solr.TextField",
+                    "analyzer": {
+                        "tokenizer": {
+                            "class": "solr.KeywordTokenizerFactory"
+                        },
+                        "filter": [{
+                            "class": "edu.umich.lib.solr_filters.LCCNNormalizerFilterFactory"
+                        }]
+                    }
+                },
+                {
+                    "name": "lc_callnumber_sortable",
+                    "class": "solr.TextField",
+                    "analyzer": {
+                        "tokenizer": {
+                            "class": "solr.KeywordTokenizerFactory"
+                        },
+                        "filter": [
+                            {
+                                "class": "solr.PatternReplaceFilterFactory",
+                                "pattern": "(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)",
+                                "replacement": " ",
+                                "replace": "all"
+                            },
+                            {
+                                "class": "edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"
+                            },
+                            {
+                                "class": "solr.PatternReplaceFilterFactory",
+                                "pattern": "^[\\p{P}\\p{Z}]+",
+                                "replacement": "",
+                                "replace": "all"
+                            },
+                            {
+                                "class": "solr.PatternReplaceFilterFactory",
+                                "pattern": "[\\p{P}\\p{Z}]+$",
+                                "replacement": "",
+                                "replace": "all"
+                            },
+                            {
+                                "class": "solr.PatternReplaceFilterFactory",
+                                "pattern": "(?:\\p{Z}+\\p{P}+)|(?:\\p{P}+\\p{Z}+)",
+                                "replacement": " ",
+                                "replace": "all"
+                            },
+                            {
+                                "class": "solr.ICUFoldingFilterFactory"
+                            }
+                        ]
+                    }
+                },
             ],
             "field": [],
             "copyField": [],
