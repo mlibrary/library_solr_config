@@ -99,6 +99,7 @@
 <field name="title_common"     type="text"  indexed="true" stored="true" multiValued="true"/>
 <field name="title_equiv"      type="text"  indexed="true" stored="true"  multiValued="true" omitNorms="true"/>
 <field name="title"            type="text"          indexed="true"  stored="true"  multiValued="true" />
+<field name="uniformTitle"            type="text"          indexed="true"  stored="true"  multiValued="true" />
 <field name="titleSort"        type="exactishSort" indexed="true"  stored="false" multiValued="false"/>
 <field name="vtitle"           type="string"        indexed="false" stored="true" multiValued="false" />
 <field name="titleProper"      type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />
