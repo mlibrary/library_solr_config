@@ -33,9 +33,9 @@
 <field name="ctrlnum"      type="exactish"   indexed="true" stored="true"  multiValued="true"/>
 <field name="rptnum"       type="exactish"   indexed="true" stored="true"  multiValued="true"/>
 <field name="sdrnum"       type="exactish"   indexed="true" stored="true"  multiValued="true"/>
-<field name="oclc"         type="integer_no_leading_zeros"        indexed="true" stored="true"  multiValued="true"/>
+<field name="oclc"         type="oclc"        indexed="true" stored="true"  multiValued="true"/>
 <field name="isbn"         type="isbn"         indexed="true" stored="true"  multiValued="true"/>
-<field name="issn"         type="numericID"         indexed="true" stored="true"  multiValued="true"/>
+<field name="issn"         type="issn"         indexed="true" stored="true"  multiValued="true"/>
 <field name="isn_related"  type="numericID"         indexed="true" stored="true" multiValued="true"/>
 <field name="barcode"      type="exactish"   indexed="true" stored="true" multiValued="true" />
     <!-- HT Stuff -->
@@ -103,6 +103,7 @@
 <field name="title_common"     type="text"  indexed="true" stored="true" multiValued="true"/>
 <field name="title_equiv"      type="text"  indexed="true" stored="true"  multiValued="true" omitNorms="true"/>
 <field name="title"            type="text"          indexed="true"  stored="true"  multiValued="true" />
+<field name="uniformTitle"            type="text"          indexed="true"  stored="true"  multiValued="true" />
 <field name="titleSort"        type="exactishSort" indexed="true"  stored="false" multiValued="false"/>
 <field name="vtitle"           type="string"        indexed="false" stored="true" multiValued="false" />
 <field name="titleProper"      type="text_no_stem_or_synonyms"    indexed="true"  stored="false" multiValued="true" />

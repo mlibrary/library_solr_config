@@ -1,16 +1,29 @@
 #!/bin/bash
 
 dir=`pwd`
-core=$1
+port=$1
+core=$2
 
-if [ "$1" == "-h" ]; then
+function usage() {    
     echo
-    echo "Usage: load_core.sh [corename]"
-    echo "Corename defaults to the name of the current directory"
-    echo "Solr url comes from  \$SOLR_URL (default: localhost:8025/solr/biblio)"
+    echo "Usage: load_core.sh port [corename]"
+    echo "  * port defaults to 8025"
+    echo "  * Corename defaults to the name of the current directory"
+    echo "  * Solr url will be http://localhost:$port/solr unless \$SOLR_ROOT is set,"
+    echo "    in which case port is ignored"
     echo
     exit 1
+}
+
+if [ "$1" == "-h" ]; then
+    usage
 fi
+
+if [ $# -eq 0 ]; then
+    usage
+fi
+
+
 
 
 if [ -z $core ]; then
@@ -19,22 +32,15 @@ if [ -z $core ]; then
 fi
 
 if [ -z $SOLR_ROOT ]; then
-    if [ ! -z $SOLR_URL ]; then
-		components=(${SOLR_URL//\// });
-
-	SOLR_ROOT="${components[0]}/${components[1]}/${components[2]}"
-    else
-	defaultsolr=1
-	SOLR_ROOT="http://localhost:8025/solr"
-	SOLR_URL="${SOLR_ROOT}/$core"
-    fi
+    SOLR_ROOT="http://localhost:${port}/solr"
+    defaultsolr=1
 fi
 
 echo -e "\n**************************************************************"
 echo -e "\n"
 if [ ! -z ${defaultsolr+x} ] ; then
-    echo -e "\$SOLR_URL not set. Can't derive solr root"
-    echo -e "   Targeting '$SOLR_ROOT' taken from default."
+    echo -e "\$SOLR_URL not set"
+    echo -e "   Targeting '${SOLR_ROOT}' taken from defaults."
 else
     echo -e "   Targeting '$SOLR_ROOT'"
 fi
@@ -44,7 +50,7 @@ if [ ! -z ${defaultcore+x} ]; then
     echo -e "No argument given for corename"
     echo -e "   '$core' taken from name of current directory"
 else
-    echo -e "   '$core' used as corename (from first argument)"
+    echo -e "   '$core' used as corename (from second argument)"
 fi
 
 echo "Loading config in ${dir}"

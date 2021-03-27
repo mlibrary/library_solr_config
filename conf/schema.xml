@@ -107,7 +107,12 @@
 
     <!ENTITY remove_all_non_numbers '
       <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}]" replacement="" replace="all"/>
-    '>
+     '>
+
+    <!ENTITY remove_all_non_issn_chars '
+      <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}xX]" replacement="" replace="all"/>
+     '>
+
 
     <!ENTITY remove_all_non_letters '
       <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{L}]" replacement="" replace="all"/>
@@ -292,7 +297,7 @@
             &standard_tokenization;
             &expand_state_abbreviations;
             &icu_downcase;
-            &stem;
+            &stem; <!-- Wait!!! Esty thinks maybe this should go after overlay -->
             &overlay_keyword_token_copies_for_later_processing;
             &remove_english_posessives;
             &keyword_aware_icu_normalization;
@@ -334,14 +339,6 @@
         </analyzer>
     </fieldType>
 
-    <!--
-        field type: exactish
-        desc: an "exact" match, allowing for simple char substitutions and case/diacritic folding
-        usage: * good as a poor-man's enum; allows to filter based on mostly-exact matches
-                 in a way that faceting does *not* allow
-
-        This really needs a "less_exactish" counterpart that does stemming and such as well.
-    -->
 
     <fieldType name="fully_anchored" class="solr.TextField"
                positionIncrementGap="&pig;" multiValued="true">
@@ -371,13 +368,20 @@
         &remove_all_punctuation;
         &icu_downcase;
         &overlay_keyword_token_copies_for_later_processing;
-        &keyword_aware_icu_normalization;	
+        &keyword_aware_icu_normalization;
         <filter class="edu.umich.lib.solr_filters.LeftAnchoredSearchFilterFactory"/>
         &remove_duplicates_at_same_position;
       </analyzer>
     </fieldType>
-    
 
+
+    <!--
+        field type: exactishSort
+        desc: derived from exactish, with removal of possesive filter.  Also removed
+              overlay_keyword_token_copies_for_later_processing.
+        usage: * good as a poor-man's enum; allows to filter based on mostly-exact matches
+                 in a way that faceting does *not* allow
+    -->
 
     <fieldType name="exactishSort" class="solr.TextField"
                positionIncrementGap="&pig;">
@@ -385,16 +389,34 @@
             &less_aggressive_pre_tokenization_character_substitution;
             &standard_single_token_tokenizer;
             &spaceify_dash_and_colon;
-      <filter class="solr.PatternReplaceFilterFactory"
-               pattern="'s\b" replacement="" replace="all"
-      />
             &remove_all_punctuation;
-            &icu_case_folding_and_normalization; 
+            &icu_case_folding_and_normalization;
             &try_to_deal_with_cjk;
             &remove_duplicates_at_same_position;
+      <!-- Left-pad numbers with zeroes -->
+      <filter class="solr.PatternReplaceFilterFactory"
+              pattern="(\d+)" replacement="00000$1" replace="all"
+      />
+      <!-- Left-trim zeroes to produce 6 digit numbers -->
+      <filter class="solr.PatternReplaceFilterFactory"
+              pattern="0*([0-9]{6,})" replacement="$1" replace="all"
+      />
+      <!-- squeeze multiple spaces to 1 -->
+      <filter class="solr.PatternReplaceFilterFactory"
+               pattern="\s\s+" replacement=" " replace="all"
+      />
         </analyzer>
     </fieldType>
 
+
+    <!--
+        field type: exactish
+        desc: an "exact" match, allowing for simple char substitutions and case/diacritic folding
+        usage: * good as a poor-man's enum; allows to filter based on mostly-exact matches
+                 in a way that faceting does *not* allow
+
+        This really needs a "less_exactish" counterpart that does stemming and such as well.
+    -->
 
     <fieldType name="exactish" class="solr.TextField"
                positionIncrementGap="&pig;">
@@ -438,19 +460,25 @@
 
     <fieldType name="isbn" class="solr.TextField">
         <analyzer>
-            <tokenizer class="solr.PatternTokenizerFactory" pattern="[;,]\s*" />
-            <filter class="edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory"/>
+          &tokenize_into_one_big_token;
+          &normalize_numeric_digits;
+          &trim_leading_whitespace_and_punctuation;
+          &trim_trailing_whitespace_and_punctuation;
+          <filter class="edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory"/>
             &remove_duplicates_at_same_position;
-            <filter class="solr.LengthFilterFactory" min="13" max="13" />
+          <filter class="solr.LengthFilterFactory" min="13" max="13" />
         </analyzer>
     </fieldType>
 
 
     <fieldType name="lccn" class="solr.TextField">
-        <analyzer>
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
-            <filter class="edu.umich.lib.solr_filters.LCCNNormalizerFilterFactory"/>
-        </analyzer>
+      <analyzer>
+        &tokenize_into_one_big_token;
+        &normalize_numeric_digits;
+        &trim_leading_whitespace_and_punctuation;
+        &trim_trailing_whitespace_and_punctuation;
+        <filter class="edu.umich.lib.solr_filters.LCCNNormalizerFilterFactory"/>
+      </analyzer>
     </fieldType>
 
     <fieldType name="lc_callnumber_sortable" class="solr.TextField">
@@ -474,6 +502,29 @@
     </fieldType>
 
 
+
+    <fieldType name="oclc" class="solr.TextField">
+        <analyzer>
+          &tokenize_into_one_big_token;
+          &normalize_numeric_digits;
+          &remove_all_non_numbers;
+          <filter class="solr.PatternReplaceFilterFactory"
+            pattern="^[^\p{N}]*0*(\p{N}+).*$" replacement="$1"/>
+        </analyzer>
+    </fieldType>
+
+    <!-- Remove all non-numbers except Xx, lowercase, and only accept if the result is 8 chars -->
+   <fieldType name="issn" class="solr.TextField">
+        <analyzer>
+          &tokenize_into_one_big_token;
+          &normalize_numeric_digits;
+          &remove_all_non_issn_chars;
+          <filter class="solr.LowerCaseFilterFactory"/>
+          <filter class="solr.LengthFilterFactory" min="8" max="8"/>
+        </analyzer>
+    </fieldType>
+
+    
     <!-- =============================================================
                    GENERIC NUMERIC IDENTIFIER TYPES
     ============================================================== -->
