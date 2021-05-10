@@ -13,6 +13,12 @@
 <field name="allfields"       type="text"       indexed="true" stored="false"/>
 <field name="allfieldsProper" type="text_no_stem_or_synonyms" indexed="true" stored="false"/>
 
+<!-- legacy aleph -->
+<field name="aleph_id" type="string" indexed="true" stored="true" required="false" multiValued="false"/>
+
+<field name="hol"      type="string" indexed="false" stored="true" multiValued="false" docValues="false"/>
+<field name="record_source" type="string" indexed="true" stored="true" required="false" multiValued="false"/>
+
 <copyField source="allfields" dest="allfieldsProper"/>
 
     <!-- Institutional Fields -->
