@@ -15,7 +15,9 @@
 
 <!-- legacy aleph -->
 <field name="aleph_id" type="string" indexed="true" stored="true" required="false" multiValued="false"/>
+
 <field name="hol"      type="string" indexed="false" stored="true" multiValued="false" docValues="false"/>
+<field name="record_source" type="string" indexed="true" stored="true" required="false" multiValued="false"/>
 
 <copyField source="allfields" dest="allfieldsProper"/>
 
