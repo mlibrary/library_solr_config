@@ -9,9 +9,11 @@
 <fieldType class="solr.TrieIntField" name="int" precisionStep="0" positionIncrementGap="0"   docValues="true"/>
 <fieldType class="solr.TrieLongField" name="long" precisionStep="0" positionIncrementGap="0" docValues="true"/>
 
-
 <fieldType class="solr.StrField" name="string" stored="false" indexed="false" multiValued="false" docValues="true"/>
 <fieldType class="solr.StrField" name="facet"  stored="false" indexed="true" multiValued="true" docValues="true"/>
+
+<fieldType class="solr.TrieIntField" name="best_bets_rank" indexed="true" stored="true"
+    precisionStep="0" positionIncrementGap="0" multiValued="false" docValues="true"/>
 
 <fieldType class="solr.TrieDateField" name="single_date_stored" stored="false" indexed="false" multiValued="false" docValues="true"/>
 
