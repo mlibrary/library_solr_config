@@ -435,8 +435,34 @@
         </analyzer>
     </fieldType>
 
+	<fieldType name="lc_subject" class="solr.TextField"
+				positionIncrementGap="&pig;">
+			<analyzer>
+				&standard_single_token_tokenizer;
+				&remove_all_punctuation;
+				&icu_downcase;
+				<filter class="solr.PatternReplaceFilterFactory"
+					pattern="\s+" replacement=" " replace="all"
+				/>
+			</analyzer>
+	</fieldType>
 
-    <!-- =============================================================
+	<fieldType name="lc_subject_sort" class="solr.TextField"
+				positionIncrementGap="&pig;">
+			<analyzer>
+				&standard_single_token_tokenizer;
+				&icu_downcase;
+				<filter class="solr.PatternReplaceFilterFactory"
+					pattern="\s*--\s*" replacement="|" replace="all"
+				/>
+				<filter class="solr.PatternReplaceFilterFactory"
+					pattern="[^\P{P}|]" replacement="" replace="all"
+				/>
+			</analyzer>
+	</fieldType>
+
+
+				<!-- =============================================================
                   A Facet type
     ==============================================================
 
