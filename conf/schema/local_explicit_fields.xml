@@ -65,6 +65,7 @@
 <field name="sudoc"         type="exactish"       indexed="true" stored="true"  multiValued="true"/>
 <field name="callnosearch"    type="lc_callnumber_searchable"  indexed="true" stored="false"  multiValued="true"/>
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
+<field name="lc_callnumber" type="string"         indexed="true" stored="true"  multiValued="true"/>
 
 <copyField source="callnumber" dest="callnosearch"/>
 
@@ -160,6 +161,8 @@
 <field name="serialTitle_common_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_common_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 
+<field name="serialTitle_first_letter" type="string" indexed="true" stored="true" multiValued="false"/>
+
 <copyField source="serialTitle" dest="serialTitleProper"/>
 <copyField source="serialTitle_common" dest="serialTitle_common_exact"/>
 <copyField source="serialTitle_common" dest="serialTitle_common_l"/>
@@ -176,6 +179,7 @@
 <field name="hlb3"    type="text"       indexed="true" stored="false" multiValued="true"  omitNorms="true" />
 <field name="hlb3Str" type="string"     indexed="true" stored="true" multiValued="true"                   />
 <field name="hlb3Delimited" type="string" indexed="false" stored="true" multiValued="true" termVectors="false"/>
+<field name="lc_subject" type="lc_subject" indexed="true" stored="true" multiValued="true"/>
 <copyField source="topic" dest="topicStr"/>
 <copyField source="topic" dest="topicProper"/>
 <copyField source="hlb3" dest="hlb3Str"/>
