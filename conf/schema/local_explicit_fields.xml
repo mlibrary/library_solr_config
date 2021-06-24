@@ -68,6 +68,7 @@
 <field name="lc_callnumber" type="string"         indexed="true" stored="true"  multiValued="true"/>
 
 <copyField source="callnumber" dest="callnosearch"/>
+<field name="lc_sortable" type="string" indexed="true" stored="true" multiValued="false"/>
 
 <field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="false"  multiValued="false"/>
 
