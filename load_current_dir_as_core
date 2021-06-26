@@ -55,16 +55,5 @@ fi
 
 echo "Loading config in ${dir}"
 
-echo -e "\n"
-echo -e "\n**************************************************************"
-echo -e "\n****  Pausing 10 seconds in case this isn't what you want **** "
-echo -e "\n**************************************************************"
-echo -e "\n"
-
-
-
-
-sleep 1
-
 
 curl "${SOLR_ROOT}/admin/cores?action=CREATE&name=$core&config=solrconfig.xml&dataDir=data&instanceDir=$dir&wt=json"

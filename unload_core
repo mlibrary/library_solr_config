@@ -1,20 +1,37 @@
 #!/bin/bash
 
-core=$1
+port=$1
+core=$2
 
-if [ "$core" == "-h" ]; then
+function usage() {
     echo
-    echo "Usage: unload_core.sh [corename]"
+    echo "Usage: $0 <port> [corename]"
     echo "Corename defaults to the name of the current directory"
-    echo "Solr url comes from either SOLR_URL (to a core) or SOLR_BASE"
-    echo "(e.g., 'http://localhost:9000/solr')."
+    echo
+    echo  Example: $0 8025 biblio
+    echo "         $0 9999        # will use current dir name as core name"
     echo
     exit 1
+}
+
+if [ "$port" == "-h" ]; then
+  usage
+fi
+
+if [ -z $port ]; then
+  usage
 fi
 
 
 if [ -z $core ]; then
     core=`basename $(pwd)`
+fi
+
+
+
+if [ -z $core ]; then
+  wd=`pwd`;
+  core=`basename $wd`
 fi
 
 if [ -z $SOLR_ROOT ]; then
@@ -23,7 +40,7 @@ if [ -z $SOLR_ROOT ]; then
 
 	SOLR_ROOT="${components[0]}/${components[1]}/${components[2]}"
     else
-	SOLR_ROOT="http://localhost:8025/solr"
+	SOLR_ROOT="http://localhost:$port/solr"
     fi
 fi
 
