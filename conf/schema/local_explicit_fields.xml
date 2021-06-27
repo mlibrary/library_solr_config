@@ -59,17 +59,34 @@
 
 <copyField source="ht_id" dest="htid"/>
 
-    <!-- Call numbers -->
-
-<field name="callnumber"    type="exactish"       indexed="true" stored="true"  multiValued="true"/>
+<!-- Call numbers -->
 <field name="sudoc"         type="exactish"       indexed="true" stored="true"  multiValued="true"/>
-<field name="callnosearch"    type="lc_callnumber_searchable"  indexed="true" stored="false"  multiValued="true"/>
+
+<!--<field name="callnumber"    type="exactish"       indexed="true" stored="true"  multiValued="true"/>-->
+<!--<field name="callnosearch"    type="lc_callnumber_searchable"  indexed="true" stored="false"  multiValued="true"/>-->
+<!--<field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="false"  multiValued="false"/>-->
+
+<field name="callnumber"   type="lc_callnumber_simple" indexed="true" stored="true" multiValued="true"/>
+<field name="callnosearch" type="lc_callnumber_simple_searchable" indexed="true" stored="false" multiValued="true"/>
+<field name="callnosort"   type="lc_callnumber_simple_passthrough" indexed="true" stored="true" multiValued="false"/>
+
+
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
-<field name="lc_callnumber" type="string"         indexed="true" stored="true"  multiValued="true"/>
 
 <copyField source="callnumber" dest="callnosearch"/>
 
-<field name="callnosort"    type="lc_callnumber_sortable"  indexed="true" stored="false"  multiValued="false"/>
+
+<field name="lc_simple" type="lc_callnumber_simple" indexed="true" stored="true" multiValued="true"/>
+<field name="lc_simple_passthrough" type="lc_callnumber_simple_passthrough" indexed="true" stored="false" multiValued="true"/>
+<field name="lc_simple_searchable" type="lc_callnumber_simple_searchable" indexed="true" stored="false" multiValued="true"/>
+<field name="lc_simple_sortable" type="lc_callnumber_simple_passthrough" indexed="true" stored="true" multiValued="false"/>
+
+
+<copyField source="lc_simple" dest="lc_simple_passthrough"/>
+<copyField source="lc_simple" dest="lc_simple_searchable"/>
+
+
+ 
 
 
     <!-- Misc fields -->
