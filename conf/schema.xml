@@ -507,55 +507,19 @@
       </analyzer>
     </fieldType>
 
+		<fieldType name="callnumber_prefix_search"  class="solr.TextField">
+			<analyzer type="index">
+				<tokenizer class="solr.KeywordTokenizerFactory"/>
+				<filter class="edu.umich.library.lucene.analysis.LCCallNumberSimpleFilterFactory" passThroughInvalid="true"/>
+				<filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>
+				</analyzer>
+			<analyzer type="query">
+				<tokenizer class="solr.KeywordTokenizerFactory"/>
+				<filter class="edu.umich.library.lucene.analysis.LCCallNumberSimpleFilterFactory" passThroughInvalid="true"/>
+				</analyzer>
+		</fieldType>
 
-    <fieldType name="lc_callnumber_simple" class="solr.TextField">
-      <analyzer>
-          <tokenizer class="solr.KeywordTokenizerFactory"/>
-          <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"/>
-        </analyzer>
-    </fieldType>
-
-    <fieldType name="lc_callnumber_simple_passthrough" class="solr.TextField">
-      <analyzer>
-          <tokenizer class="solr.KeywordTokenizerFactory"/>
-          <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory" allowInvalid="true"/>
-        </analyzer>
-    </fieldType>
-
-
-		<fieldType name="lc_callnumber_simple_searchable" class="solr.TextField">
-      <analyzer type="index">
-          <tokenizer class="solr.KeywordTokenizerFactory"/>
-          <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory" allowInvalid="true"/>
-          <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>
-        </analyzer>
-      <analyzer type="query">
-          <tokenizer class="solr.KeywordTokenizerFactory"/>
-          <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory" allowInvalid="true"/>
-        </analyzer>
-    </fieldType>
-
-
-<!--    <fieldType name="lc_callnumber_sortable" class="solr.TextField">-->
-<!--        <analyzer>-->
-<!--          <tokenizer class="solr.KeywordTokenizerFactory"/>-->
-<!--	  &try_to_parse_callnumber;-->
-<!--        </analyzer>-->
-<!--    </fieldType>-->
-
-<!--    <fieldType name="lc_callnumber_searchable" class="solr.TextField"  docValues="false">-->
-<!--        <analyzer type="index">-->
-<!--          <tokenizer class="solr.KeywordTokenizerFactory"/>-->
-<!--    	    &try_to_parse_callnumber;-->
-<!--            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>-->
-<!--        </analyzer>-->
-<!--        <analyzer type="query">-->
-<!--            <tokenizer class="solr.KeywordTokenizerFactory"/>-->
-<!--    	    &try_to_parse_callnumber;-->
-<!--        </analyzer>-->
-<!--    </fieldType>-->
-
-
+		<fieldType name="callnumber_sortable" class="edu.umich.library.library_identifier.schema.CallnumberSortableFieldType" />
 
     <fieldType name="oclc" class="solr.TextField">
         <analyzer>
