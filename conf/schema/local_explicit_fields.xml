@@ -178,7 +178,7 @@
 <field name="serialTitle_common_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_common_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 
-<field name="title_initial" type="string" indexed="true" stored="true" multiValued="false"/>
+<field name="title_initial" type="title_initial_type" indexed="true" stored="true" multiValued="false"/>
 
 <copyField source="serialTitle" dest="serialTitleProper"/>
 <copyField source="serialTitle_common" dest="serialTitle_common_exact"/>
