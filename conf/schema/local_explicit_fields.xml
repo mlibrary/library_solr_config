@@ -178,7 +178,7 @@
 <field name="serialTitle_common_l"    type="text_leftanchored" indexed="true" stored="false" multiValued="true" />
 <field name="serialTitle_common_exact" type="fully_anchored"  indexed="true"  stored="false" multiValued="true"/>
 
-<field name="title_initial" type="string" indexed="true" stored="true" multiValued="false"/>
+<field name="title_initial" type="title_initial_type" indexed="true" stored="true" multiValued="false"/>
 
 <copyField source="serialTitle" dest="serialTitleProper"/>
 <copyField source="serialTitle_common" dest="serialTitle_common_exact"/>
@@ -196,6 +196,7 @@
 <field name="hlb3"    type="text"       indexed="true" stored="false" multiValued="true"  omitNorms="true" />
 <field name="hlb3Str" type="string"     indexed="true" stored="true" multiValued="true"                   />
 <field name="hlb3Delimited" type="string" indexed="false" stored="true" multiValued="true" termVectors="false"/>
+<field name="lc_subject" type="lc_subject" indexed="true" stored="true" multiValued="true"/>
 <copyField source="topic" dest="topicStr"/>
 <copyField source="topic" dest="topicProper"/>
 <copyField source="hlb3" dest="hlb3Str"/>
@@ -203,9 +204,6 @@
 
 <field name="lc_subject_display"     type="string" indexed="false" stored="true" multiValued="true"/>
 <field name="non_lc_subject_display" type="string" indexed="false" stored="true" multiValued="true"/>
-
-
-
 
     <!-- Time and Place -->
 
