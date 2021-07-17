@@ -94,7 +94,7 @@
     <!-- Ways to ditch stuff -->
 
 <!ENTITY remove_punctuation_next_to_a_space '
-  <filter class="solr.PatternReplaceFilterFactory" pattern="(?:\p{Z}+\p{P}+)|(?:\p{P}+\p{Z}+)" replacement=" " replace="all"/>
+  <filter class="solr.PatternReplaceFilterFactory" pattern="(?:\p{Z}+[\p{P}\p{S}]+)|(?:[\p{P}\p{S}]+\p{Z}+)" replacement=" " replace="all"/>
 '>
 
     <!ENTITY trim_leading_and_trailing_whitespace '
@@ -119,15 +119,15 @@
     '>
 
     <!ENTITY remove_all_punctuation '
-      <filter class="solr.PatternReplaceFilterFactory" pattern="[\p{P}]" replacement="" replace="all"/>
+      <filter class="solr.PatternReplaceFilterFactory" pattern="[\p{P}\p{S}]" replacement="" replace="all"/>
     '>
 
     <!ENTITY trim_leading_whitespace_and_punctuation '
-      <filter class="solr.PatternReplaceFilterFactory" pattern="^[\p{P}\p{Z}]+" replacement="" replace="all"/>
+      <filter class="solr.PatternReplaceFilterFactory" pattern="^[\p{P}\p{Z}\p{S}]+" replacement="" replace="all"/>
     '>
 
     <!ENTITY trim_trailing_whitespace_and_punctuation '
-      <filter class="solr.PatternReplaceFilterFactory" pattern="[\p{P}\p{Z}]+$" replacement="" replace="all"/>
+      <filter class="solr.PatternReplaceFilterFactory" pattern="[\p{P}\p{Z}\p{S}]+$" replacement="" replace="all"/>
     '>
 
     <!-- stemming -->
