@@ -390,16 +390,41 @@
       </analyzer>
    </fieldType>
 
-   <!-- title_initial takes values A,B,...Z, Other, and 0-9 -->
-   <fieldType name="title_initial_type"  class="solr.TextField" positionIncrementGap="&pig;">
-      <analyzer>
-        &standard_single_token_tokenizer;
-        &icu_case_folding_and_normalization;
-        <filter class="solr.PatternReplaceFilterFactory"
-            pattern="other" replacement="Other" />
-      </analyzer>
-   </fieldType>
 
+		<!-- title_initial maps to values A,B,...Z, Other, and 0-9
+
+     Use case: The ejournals "A-Z" list for browsing ejournals
+     by first letter.
+
+		 Here we derive them from the given string:
+		   * tokenize to a single token
+		   * trim any leading whitespace/punctuation
+		   * reduce to the first character
+		   * case fold and normalize
+		   * turn anything that's not a-z or 0-9 into "Other"
+		   * turn anything that _is_ a digit into "0-9"
+
+		 For queries, we assume you're only sending one of the 28 valid
+		 values (A,B,...,Z,0-9,Other)
+		-->
+
+		<fieldType name="title_initial_type"  class="solr.TextField" positionIncrementGap="&pig;">
+			<analyzer type="index">
+				&standard_single_token_tokenizer;
+				&trim_leading_whitespace_and_punctuation;
+				<filter class="solr.PatternReplaceFilterFactory"
+					pattern="^(.).*$" replacement="$1"/>
+				&icu_case_folding_and_normalization;
+				<filter class="solr.PatternReplaceFilterFactory"
+					pattern="^[^a-z0-9]" replacement="other"/>
+				<filter class="solr.PatternReplaceFilterFactory"
+					pattern="^\d" replacement="0-9"/>
+			</analyzer>
+			<analyzer type="query">
+				&standard_single_token_tokenizer;
+				&icu_case_folding_and_normalization;
+			</analyzer>
+		</fieldType>
     <!--
         field type: exactishSort
         desc: derived from exactish, with removal of possesive filter.  Also removed
