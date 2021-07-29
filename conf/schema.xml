@@ -351,6 +351,7 @@
                positionIncrementGap="&pig;">
         <analyzer type="index">
             &standard_tokenization;
+            &expand_state_abbreviations;
             &cleanup;
             &icu_downcase;
             &overlay_keyword_token_copies_for_later_processing;
@@ -378,6 +379,7 @@
                positionIncrementGap="&pig;">
         <analyzer type="index">
             &standard_tokenization;
+            &expand_state_abbreviations;
             &cleanup;
             &icu_downcase;
             &overlay_keyword_token_copies_for_later_processing;
