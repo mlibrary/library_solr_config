@@ -2,8 +2,6 @@ name: Build latest push
 
 on: push
 
-jobs:
-
 env:
   IMAGE_NAME: library-solr
 
