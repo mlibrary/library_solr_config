@@ -2,3 +2,4 @@ data
 start_solr.sh
 stop_solr.sh
 .idea
+core.properties
