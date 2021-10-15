@@ -61,8 +61,8 @@
      ====================================================== -->
 
 
-<!-- basic, primative types (int, float, string, etc.) -->
-<!ENTITY primative_types SYSTEM "schema/primative_types.xml">
+<!-- basic, primitive types (int, float, string, etc.) -->
+<!ENTITY primitive_types SYSTEM "schema/primitive_types.xml">
 
 <!-- Constants -->
 <!ENTITY nbsp "&#160;"> <!-- non-breaking space -->
@@ -128,6 +128,14 @@
 <filter class="solr.PatternReplaceFilterFactory" pattern="[&punct;]" replacement="" replace="all"/>
 '>
 
+<!ENTITY spacify_all_punctuation '
+<filter class="solr.PatternReplaceFilterFactory" pattern="[&punct;]" replacement=" " replace="all"/>
+'>
+
+<!ENTITY collapse_whitespace '
+<filter class="solr.PatternReplaceFilterFactory" pattern="^[&white;]+" replacement=" " replace="all"/>
+'>
+
 <!ENTITY trim_leading_whitespace_and_punctuation '
 <filter class="solr.PatternReplaceFilterFactory" pattern="^[&punct;&white;]+" replacement="" replace="all"/>
 '>
@@ -142,10 +150,14 @@
 &trim_trailing_whitespace_and_punctuation;
 '>
 
+<!ENTITY spacify_punctuation '
+&spacify_all_punctuation;
+&collapse_whitespace;
+'>
 
-<!-- stemming -->
-<!-- Note we don't need to pull in the headwords, etc, for kstem since they're hardcoded (!) in.
-     See the files at https://github.com/apache/lucene-solr/tree/master/lucene/analysis/common/src/java/org/apache/lucene/analysis/en
+<!-- stemming
+  Note we don't need to pull in the headwords, etc, for kstem since they're hardcoded (!) in.
+  See the files at https://github.com/apache/lucene-solr/tree/master/lucene/analysis/common/src/java/org/apache/lucene/analysis/en
  -->
 
 <!ENTITY stem_with_porter_stemmer '
@@ -156,7 +168,7 @@
 <filter class="solr.KStemFilterFactory"/>
 '>
 
-<!ENTITY deal_with_english_possives_in_absense_of_stemming '
+<!ENTITY deal_with_english_possessives_in_absense_of_stemming '
 <filter class="solr.EnglishPossessiveFilterFactory"/>
 '>
 
@@ -201,14 +213,6 @@
 <filter class="solr.FixBrokenOffsetsFilterFactory"/>
 '>
 
-<!--<!ENTITY try_to_parse_callnumber '-->
-<!--  &remove_punctuation_next_to_a_space;-->
-<!--  <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>-->
-<!--  &trim_leading_whitespace_and_punctuation;-->
-<!--  &trim_trailing_whitespace_and_punctuation;-->
-<!--  &remove_punctuation_next_to_a_space;-->
-<!--  &icu_case_folding_and_normalization;-->
-<!--'>-->
 
 
 <!ENTITY pre_tokenization_case_folding '
@@ -281,8 +285,8 @@
     -->
 
 
-    <!-- Load up the primative field types -->
-    &primative_types;
+    <!-- Load up the primitive field types -->
+    &primitive_types;
 
 
     <!-- load up any local additions -->
@@ -311,8 +315,8 @@
             &expand_state_abbreviations;
             &cleanup;
             &icu_downcase;
-            &stem; <!-- Wait!!! Esty thinks maybe this should go after overlay -->
             &overlay_keyword_token_copies_for_later_processing;
+            &stem;
             &remove_english_posessives;
             &keyword_aware_icu_normalization;
             &try_to_deal_with_cjk;
@@ -324,8 +328,8 @@
             &cleanup;
             &icu_downcase;
             &expand_synonyms_at_query_time_must_come_before_overlay_or_stemming;
-            &stem;
             &overlay_keyword_token_copies_for_later_processing;
+            &stem;
             &remove_english_posessives;
             &keyword_aware_icu_normalization;
             &try_to_deal_with_cjk;
@@ -362,7 +366,7 @@
             &tokenize_with_icu;
             &cleanup;
             &spaceify_dash_and_colon;
-            &deal_with_english_possives_in_absense_of_stemming;
+            &deal_with_english_possessives_in_absense_of_stemming;
             &remove_all_punctuation;
             &icu_case_folding_and_normalization;
             &remove_duplicates_at_same_position;
@@ -378,7 +382,7 @@
             &tokenize_with_icu;
             &cleanup;
             &spaceify_dash_and_colon;
-            &deal_with_english_possives_in_absense_of_stemming;
+            &deal_with_english_possessives_in_absense_of_stemming;
             &remove_all_punctuation;
             &icu_downcase;
             &overlay_keyword_token_copies_for_later_processing;
@@ -593,7 +597,7 @@
             <tokenizer class="solr.KeywordTokenizerFactory"/>
             <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"
                     allowInvalid="true"/>
-            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>
+            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="1"/>
         </analyzer>
         <analyzer type="query">
             <tokenizer class="solr.KeywordTokenizerFactory"/>
@@ -738,13 +742,7 @@
     <field name="id" type="&id_type;" indexed="true" stored="&id_stored;"
            required="true"
            multiValued="false"/>
-
-    <field name="tla" type="text_leftanchored" indexed="true" stored="true"/>
-    <field name="t" type="text" indexed="true" stored="true"/>
-    <field name="e" type="exactish" indexed="true" stored="true"/>
-    <copyField source="t" dest="tla"/>
-    <copyField source="t" dest="e"/>
-
+    
 
     <!-- Field to use to determine and enforce document uniqueness.
          Unless this field is marked with required="false", it will be a required field
