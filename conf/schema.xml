@@ -576,57 +576,6 @@
     </fieldType>
 
 
-    <fieldType name="lc_callnumber_simple" class="solr.TextField">
-        <analyzer>
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
-            <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"/>
-        </analyzer>
-    </fieldType>
-
-    <fieldType name="lc_callnumber_simple_passthrough" class="solr.TextField">
-        <analyzer>
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
-            <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"
-                    allowInvalid="true"/>
-        </analyzer>
-    </fieldType>
-
-
-    <fieldType name="lc_callnumber_simple_searchable" class="solr.TextField">
-        <analyzer type="index">
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
-            <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"
-                    allowInvalid="true"/>
-            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="1"/>
-        </analyzer>
-        <analyzer type="query">
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
-            <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"
-                    allowInvalid="true"/>
-        </analyzer>
-    </fieldType>
-
-
-    <!--    <fieldType name="lc_callnumber_sortable" class="solr.TextField">-->
-    <!--        <analyzer>-->
-    <!--          <tokenizer class="solr.KeywordTokenizerFactory"/>-->
-    <!--	  &try_to_parse_callnumber;-->
-    <!--        </analyzer>-->
-    <!--    </fieldType>-->
-
-    <!--    <fieldType name="lc_callnumber_searchable" class="solr.TextField"  docValues="false">-->
-    <!--        <analyzer type="index">-->
-    <!--          <tokenizer class="solr.KeywordTokenizerFactory"/>-->
-    <!--    	    &try_to_parse_callnumber;-->
-    <!--            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>-->
-    <!--        </analyzer>-->
-    <!--        <analyzer type="query">-->
-    <!--            <tokenizer class="solr.KeywordTokenizerFactory"/>-->
-    <!--    	    &try_to_parse_callnumber;-->
-    <!--        </analyzer>-->
-    <!--    </fieldType>-->
-
-
     <fieldType name="oclc" class="solr.TextField">
         <analyzer>
             &tokenize_into_one_big_token;
@@ -647,6 +596,42 @@
             <filter class="solr.LengthFilterFactory" min="8" max="8"/>
         </analyzer>
     </fieldType>
+
+
+    <!--  =============================================================
+               LC Call Numbers
+
+     Our LC Callnumber uses custom solr java code
+     (git@github.com:billdueber/library_identifier_solr_filters) that expose
+     one custom field type and one analysis filter:
+
+       * `edu.umich.library.library_identifier.schema.CallnumberSortableFieldType`
+         will store the value as given, and index a value that is suitable
+         for exact matches (callnumber:"QA 11.2 .C3"), range queries
+         (callnumber:[* TO "QA 11.2 .C3"]), and sorting.
+      * `edu.umich.library.lucene.analysis.LCCallNumberSimpleFilterFactory`
+         does the same transformation on a single token (so, use KeywordTokenizer)
+         as above, but in the analysis chain so it can be combined with
+         `solr.EdgeNGramFilterFactory` to get prefix ("starts-with") searches
+
+    ============================================================== -->
+
+
+    <!-- For sorting and range queries -->
+    <fieldType name="lc_callnumber" class="edu.umich.library.library_identifier.schema.CallnumberSortableFieldType"
+               docValues="true" multiValued="true" stored="true"/>
+
+
+    <!-- for start_with/prefix searches -->
+    <fieldType name="lc_callnumber_starts_with" class="solr.TextField">
+        <analyzer type="index">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="edu.umich.library.lucene.analysis.LCCallNumberSimpleFilterFactory" allowInvalid="true"/>
+            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="1"/>
+        </analyzer>
+
+    </fieldType>
+
 
 
     <!-- =============================================================
