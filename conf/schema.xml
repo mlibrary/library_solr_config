@@ -625,11 +625,16 @@
     <!-- for start_with/prefix searches -->
     <fieldType name="lc_callnumber_starts_with" class="solr.TextField">
         <analyzer type="index">
-            <tokenizer class="solr.KeywordTokenizerFactory"/>
-            <filter class="edu.umich.library.lucene.analysis.LCCallNumberSimpleFilterFactory" allowInvalid="true"/>
+          <tokenizer class="solr.KeywordTokenizerFactory"/>
+            &icu_case_folding_and_normalization;
+            <filter class="edu.umich.library.lucene.analysis.LCCallNumberSimpleFilterFactory" passThroughInvalid="false"/>
             <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="1"/>
         </analyzer>
-
+        <analyzer type="query">
+          <tokenizer class="solr.KeywordTokenizerFactory"/>
+            &icu_case_folding_and_normalization;	  
+            <filter class="edu.umich.library.lucene.analysis.LCCallNumberSimpleFilterFactory" passThroughInvalid="true"/>
+        </analyzer>
     </fieldType>
 
 
