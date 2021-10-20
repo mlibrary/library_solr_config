@@ -608,7 +608,12 @@
        * `edu.umich.library.library_identifier.schema.CallnumberSortableFieldType`
          will store the value as given, and index a value that is suitable
          for exact matches (callnumber:"QA 11.2 .C3"), range queries
-         (callnumber:[* TO "QA 11.2 .C3"]), and sorting.
+         (callnumber:[* TO "QA 11.2 .C3"]), and sorting (if single-valued). It
+         takes an argument "passThroughInvalid" (default: false) to determine
+         whether or not to ignore (default) or pass through thigns that don't
+         look like call numbers.
+       * As above, but without "passThroughInvalid=true" so only valid LC Callnumbers
+         will populate the field
       * `edu.umich.library.lucene.analysis.LCCallNumberSimpleFilterFactory`
          does the same transformation on a single token (so, use KeywordTokenizer)
          as above, but in the analysis chain so it can be combined with
@@ -619,8 +624,10 @@
 
     <!-- For sorting and range queries -->
     <fieldType name="lc_callnumber" class="edu.umich.library.library_identifier.schema.CallnumberSortableFieldType"
-               docValues="true" multiValued="true" stored="true"/>
+               docValues="true" multiValued="true" stored="true" passThroughInvalid="true"/>
 
+    <fieldType name="lc_callnumber_strict" class="edu.umich.library.library_identifier.schema.CallnumberSortableFieldType"
+               docValues="true" multiValued="true" stored="true"/>
 
     <!-- for start_with/prefix searches -->
     <fieldType name="lc_callnumber_starts_with" class="solr.TextField">

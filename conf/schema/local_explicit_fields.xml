@@ -63,14 +63,16 @@
 <field name="sudoc"         type="exactish"       indexed="true" stored="true"  multiValued="true"/>
 
 <field name="callnumber"   type="lc_callnumber" indexed="true" stored="true" multiValued="true"/>
+<field name="lc_callnumber" type="lc_callnumber_strict" indexed="true" stored="true" multiValued="true"/>
 <field name="callnumber_starts_with" type="lc_callnumber_starts_with" indexed="true" stored="false" multiValued="true"/>
-<copyField source="callnumber" dest="callnumber_starts_with"/>
 
 <!-- Single-valued callnumber for sorting -->
-<field name="callnosort"   type="lc_callnumber" indexed="true" stored="false" multiValued="false"/>
-
-
+<field name="callnosort"   type="lc_callnumber_strict" docValues="false" indexed="true" stored="false" multiValued="false"/>
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
+
+
+<copyField source="callnumber" dest="lc_callnumber"/>
+<copyField source="callnumber" dest="callnumber_starts_with"/>
 
 
 
