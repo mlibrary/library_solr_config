@@ -76,7 +76,7 @@
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
 
 
-<copyField source="callnumber" dest="callnumber_starts_with"/>
+<copyField source="lc_callnumber" dest="callnumber_starts_with"/>
 
 
 
