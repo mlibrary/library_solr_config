@@ -8,6 +8,11 @@
 <field name="id_int"          type="long"      indexed="true" stored="true"/>
 <copyField source="id" dest="id_int"/>
 
+<field name="source_file" type="string" indexed="false" stored="true"/>
+
+<!-- When was this last indexed? -->
+<field name="catalog_index_date" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
+
 <field name="fullrecord"      type="string"     indexed="false" stored="true" docValues="false"/>
 
 <field name="allfields"       type="text"       indexed="true" stored="false"/>
@@ -71,7 +76,6 @@
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
 
 
-<copyField source="callnumber" dest="lc_callnumber"/>
 <copyField source="callnumber" dest="callnumber_starts_with"/>
 
 
