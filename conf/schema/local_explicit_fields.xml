@@ -73,10 +73,14 @@
 
 <!-- Single-valued callnumber for sorting -->
 <field name="callnosort"   type="lc_callnumber_strict" docValues="false" indexed="true" stored="false" multiValued="false"/>
+
+<field name="callnumber_sort_key" type="lc_callnumber_sort_key_strict" indexed="true" docValues="false" stored="true" multiValued="false"/>
+
 <field name="callnoletters" type="exactish"       indexed="true" stored="false" multiValued="false"/>
 
 
 <copyField source="lc_callnumber" dest="callnumber_starts_with"/>
+
 
 
 
