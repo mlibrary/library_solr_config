@@ -743,7 +743,8 @@
       in a compatible way. Any analysis applied to the <uniqueKey> should _not_ produce multiple
       tokens
     -->
-    <field name="id" type="&id_type;" indexed="true" stored="&id_stored;"
+    <field name="id" type="lc_callnumber_sort_key_strict;" indexed="true" stored="true"
+	   docValues="false"
            required="true"
            multiValued="false"/>
     
@@ -755,3 +756,6 @@
 
 
 </schema>
+
+
+
