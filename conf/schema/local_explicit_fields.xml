@@ -4,5 +4,4 @@
 <!-- TEST -->
 
 <field name="callnumber" type="lc_callnumber_strict" stored="true" indexed="false"/>
-<field name="sort_key" type="lc_callnumber_sort_key_strict" stored="true" indexed="true" docValues="false"/>
-<filed name="bib_id" type="string" stored="true" indexed="true"/>
+<field name="bib_id" type="string" stored="true" indexed="true"/>

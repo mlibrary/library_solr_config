@@ -731,8 +731,10 @@
     <!-- points to the root document of a block of nested documents. Required for nested
        document support, may be removed otherwise
     -->
-    <field name="_root_" type="string" indexed="true" stored="false"
-           docValues="false"/>
+    
+    <!--
+	<field name="_root_" type="string" indexed="true" stored="false"  docValues="false"/>
+    -->     
 
     <!-- Only remove the "id" field if you have a very good reason to. While not strictly
       required, it is highly recommended. A <uniqueKey> is present in almost all Solr
@@ -743,8 +745,8 @@
       in a compatible way. Any analysis applied to the <uniqueKey> should _not_ produce multiple
       tokens
     -->
-    <field name="id" type="lc_callnumber_sort_key_strict;" indexed="true" stored="true"
-	   docValues="false"
+    <field name="id" type="lc_callnumber_sort_key_strict" indexed="true" stored="true"
+           docValues="false"
            required="true"
            multiValued="false"/>
     
