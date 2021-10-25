@@ -1,7 +1,17 @@
 <!-- This fine included so attempts to import the default
      filename in schema.xml don't blow up -->
 
-<!-- TEST -->
+<field name="id" type="lc_callnumber_strict" indexed="true" stored="true"
+       docValues="false"
+       required="true"
+       multiValued="false"/>
+    
+<!-- Field to use to determine and enforce document uniqueness.
+     Unless this field is marked with required="false", it will be a required field
+-->
+<uniqueKey>id</uniqueKey>
+
+
 
 <field name="callnumber" type="lc_callnumber_strict" stored="true" indexed="false"/>
 <field name="bib_id" type="string" stored="true" indexed="true"/>
