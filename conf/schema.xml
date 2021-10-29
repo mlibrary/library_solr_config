@@ -3,267 +3,265 @@
 
 <!DOCTYPE schema [
 
-    <!--  =====================================================
-          LOCAL FIELD DEFINITIONS, DYNAMIC FIELDS,
-          ETC.
-          =====================================================
+        <!--  =====================================================
+        LOCAL FIELD DEFINITIONS, DYNAMIC FIELDS,
+        ETC.
+        =====================================================
 
-          If you want to keep this generic setup separate from
-          your core-specific stuff, you might want to keep
-          them in loaded files outside of this git repo.
+        If you want to keep this generic setup separate from
+        your core-specific stuff, you might want to keep
+        them in loaded files outside of this git repo.
 
-          By default, we load them up from schema/local_explicit_fields.xml,
-          schema/local_fieldtypes.xml, and schema/local_dynamic_fields.xml, all
-          of which are shipped as empty.
+        By default, we load them up from schema/local_explicit_fields.xml,
+        schema/local_fieldtypes.xml, and schema/local_dynamic_fields.xml, all
+        of which are shipped as empty.
 
-          You can edit those files directly, or change the below
-          paths to something else.
+        You can edit those files directly, or change the below
+        paths to something else.
 
-          Entity expansion in XML is *not* order-dependent, so you can
-          use any of the entities declared here in the local files.
+        Entity expansion in XML is *not* order-dependent, so you can
+        use any of the entities declared here in the local files.
 
-          KEEP IN MIND that if you want to override any of the
-          basic field types (e.g., 'text') you need to eliminate them
-          from the shipped config OR replace them via the
-          schema API (which this whole thing should be switched to...)
+        KEEP IN MIND that if you want to override any of the
+        basic field types (e.g., 'text') you need to eliminate them
+        from the shipped config OR replace them via the
+        schema API (which this whole thing should be switched to...)
 
-          One approach is to have a clone of this repo somewhere,
-          symlink in the `conf` directory, and change the
-          location of the local_*.xml files to be '../local_fieldtypes.xml',
-          keeping them "next to" the `conf` directory, probably as part
-          of their *own* repo.
+        One approach is to have a clone of this repo somewhere,
+        symlink in the `conf` directory, and change the
+        location of the local_*.xml files to be '../local_fieldtypes.xml',
+        keeping them "next to" the `conf` directory, probably as part
+        of their *own* repo.
 
-          [It would be nice if we could use the '${solr.data.dir:default}'
-          syntax in here as can in solrconfig.xml, but apparently not.]
+        [It would be nice if we could use the '${solr.data.dir:default}'
+        syntax in here as can in solrconfig.xml, but apparently not.]
 
-    -->
+        -->
 
-    <!ENTITY local_fieldtypes SYSTEM "schema/local_fieldtypes.xml">
-    <!ENTITY local_explicit_fields SYSTEM "schema/local_explicit_fields.xml">
-    <!ENTITY local_dynamic_fields SYSTEM "schema/local_dynamic_fields.xml">
+<!ENTITY local_fieldtypes SYSTEM "schema/local_fieldtypes.xml">
+<!ENTITY local_explicit_fields SYSTEM "schema/local_explicit_fields.xml">
+<!ENTITY local_dynamic_fields SYSTEM "schema/local_dynamic_fields.xml">
 
-    <!-- Which stemmer to use when using a stemmer? If you set this to the
-         empty string, no stemming will happen even where it normally would
-    -->
+<!-- Which stemmer to use when using a stemmer? If you set this to the
+     empty string, no stemming will happen even where it normally would
+-->
 
-    <!-- <!ENTITY stem '&stem_with_porter_stemmer;'> -->
-    <!ENTITY stem '&stem_with_kstemmer;'>
+<!-- <!ENTITY stem '&stem_with_porter_stemmer;'> -->
+<!ENTITY stem '&stem_with_kstemmer;'>
 
-    <!-- Definition of the required ID type -->
-    <!ENTITY id_type 'string'>
-    <!ENTITY id_stored 'true'>
+<!-- Definition of the required ID type -->
+<!ENTITY id_type 'string'>
+<!ENTITY id_stored 'true'>
 
-    <!-- imaginary space between repreated fields -->
-    <!ENTITY pig '10000'> <!-- position increment gap -->
+<!-- imaginary space between repreated fields -->
+<!ENTITY pig '10000'> <!-- position increment gap -->
 
-    <!-- ======================================================
-         END OF THE STUFF YOU WOULD NORMALLY EDIT
-         ====================================================== -->
+<!-- ======================================================
+     END OF THE STUFF YOU WOULD NORMALLY EDIT
+     ====================================================== -->
 
 
+<!-- basic, primative types (int, float, string, etc.) -->
+<!ENTITY primative_types SYSTEM "schema/primative_types.xml">
 
-    <!-- basic, primative types (int, float, string, etc.) -->
-    <!ENTITY primative_types SYSTEM "schema/primative_types.xml">
+<!-- Constants -->
+<!ENTITY nbsp "&#160;"> <!-- non-breaking space -->
+<!ENTITY zwsp "&#x200B;">
 
-    <!-- Constants -->
-    <!ENTITY nbsp "&#160;"> <!-- non-breaking space -->
-    <!ENTITY zwsp "&#x200B;">
+<!-- For pattern matching -->
+<!-- Lots of what we think of as punctuation is actually in the symbols unicode classes
+           for mathematics and currency and "other", so include those -->
+<!ENTITY punct '\p{P}\p{Sm}\p{Sc}\p{So}' >
+<!ENTITY control '\p{Cc}' >
+<!ENTITY white '\p{Z}' >
 
-    <!-- For pattern matching -->
-    <!-- Lots of what we think of as punctuation is actually in the symbols unicode classes
-		       for mathematics and curency and "other", so include those -->
-    <!ENTITY punct '\p{P}\p{Sm}\p{Sc}\p{So}' >
-    <!ENTITY control '\p{Cc}' >
-    <!ENTITY white '\p{Z}' >
+<!-- Changes at the character level -->
 
-    <!-- Changes at the character level -->
+<!ENTITY pre_tokenization_character_substitution '
+<charFilter class="solr.MappingCharFilterFactory" mapping="schema/character_and_symbol_substitutions.txt"/>
+'>
+<!ENTITY normalize_numeric_digits '
+<filter class="solr.DecimalDigitFilterFactory"/>
+'>
 
-    <!ENTITY pre_tokenization_character_substitution '
-    <charFilter class="solr.MappingCharFilterFactory" mapping="schema/character_and_symbol_substitutions.txt"/>
-    '>
-    <!ENTITY normalize_numeric_digits '
-    <filter class="solr.DecimalDigitFilterFactory"/>
-    '>
+<!ENTITY less_aggressive_pre_tokenization_character_substitution '
+<charFilter class="solr.MappingCharFilterFactory" mapping="schema/exactish_char_substitution.txt"/>
+'>
 
-    <!ENTITY less_aggressive_pre_tokenization_character_substitution '
-    <charFilter class="solr.MappingCharFilterFactory" mapping="schema/exactish_char_substitution.txt"/>
-    '>
 
+<!ENTITY spaceify_dash_and_colon '
+<filter class="solr.PatternReplaceFilterFactory"
+        pattern="([:\-])" replacement=" " replace="all"
+/>
+'>
 
-    <!ENTITY spaceify_dash_and_colon '
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="([:\-])" replacement=" " replace="all"
-    />
-    '>
 
+<!-- Ways to ditch stuff -->
 
+<!ENTITY remove_punctuation_next_to_a_space '
+<filter class="solr.PatternReplaceFilterFactory" pattern="(?:&white;+[&punct;]+)|(?:[&punct;]+&white;+)" replacement=" "
+        replace="all"/>
+'>
 
+<!ENTITY trim_leading_and_trailing_whitespace '
+<filter class="solr.TrimFilterFactory"/>
+'>
 
-    <!-- Ways to ditch stuff -->
+<!ENTITY remove_all_numbers '
+<filter class="solr.PatternReplaceFilterFactory" pattern="[\p{N}]" replacement="" replace="all"/>
+'>
 
-    <!ENTITY remove_punctuation_next_to_a_space '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="(?:&white;+[&punct;]+)|(?:[&punct;]+&white;+)" replacement=" " replace="all"/>
-    '>
+<!ENTITY remove_all_non_numbers '
+<filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}]" replacement="" replace="all"/>
+'>
 
-    <!ENTITY trim_leading_and_trailing_whitespace '
-    <filter class="solr.TrimFilterFactory"/>
-    '>
+<!ENTITY remove_all_non_issn_chars '
+<filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}xX]" replacement="" replace="all"/>
+'>
 
-    <!ENTITY remove_all_numbers '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="[\p{N}]" replacement="" replace="all"/>
-    '>
 
-    <!ENTITY remove_all_non_numbers '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}]" replacement="" replace="all"/>
-    '>
+<!ENTITY remove_all_non_letters '
+<filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{L}]" replacement="" replace="all"/>
+'>
 
-    <!ENTITY remove_all_non_issn_chars '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}xX]" replacement="" replace="all"/>
-    '>
+<!ENTITY remove_all_punctuation '
+<filter class="solr.PatternReplaceFilterFactory" pattern="[&punct;]" replacement="" replace="all"/>
+'>
 
+<!ENTITY trim_leading_whitespace_and_punctuation '
+<filter class="solr.PatternReplaceFilterFactory" pattern="^[&punct;&white;]+" replacement="" replace="all"/>
+'>
 
-    <!ENTITY remove_all_non_letters '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{L}]" replacement="" replace="all"/>
-    '>
+<!ENTITY trim_trailing_whitespace_and_punctuation '
+<filter class="solr.PatternReplaceFilterFactory" pattern="[&punct;&white;]+$" replacement="" replace="all"/>
+'>
 
-    <!ENTITY remove_all_punctuation '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="[&punct;]" replacement="" replace="all"/>
-    '>
+<!ENTITY cleanup '
+<filter class="solr.PatternReplaceFilterFactory" pattern="[&control;]" replacement="" replace="all"/>
+&trim_leading_whitespace_and_punctuation;
+&trim_trailing_whitespace_and_punctuation;
+'>
 
-    <!ENTITY trim_leading_whitespace_and_punctuation '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="^[&punct;&white;]+" replacement="" replace="all"/>
-    '>
 
-    <!ENTITY trim_trailing_whitespace_and_punctuation '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="[&punct;&white;]+$" replacement="" replace="all"/>
-    '>
+<!-- stemming -->
+<!-- Note we don't need to pull in the headwords, etc, for kstem since they're hardcoded (!) in.
+     See the files at https://github.com/apache/lucene-solr/tree/master/lucene/analysis/common/src/java/org/apache/lucene/analysis/en
+ -->
 
-    <!ENTITY cleanup '
-    <filter class="solr.PatternReplaceFilterFactory" pattern="[&control;]" replacement="" replace="all"/>
-    &trim_leading_whitespace_and_punctuation;
-    &trim_trailing_whitespace_and_punctuation;
-    '>
+<!ENTITY stem_with_porter_stemmer '
+<filter class="solr.PorterStemFilterFactory"/>
+'>
 
+<!ENTITY stem_with_kstemmer '
+<filter class="solr.KStemFilterFactory"/>
+'>
 
-    <!-- stemming -->
-    <!-- Note we don't need to pull in the headwords, etc, for kstem since they're hardcoded (!) in.
-         See the files at https://github.com/apache/lucene-solr/tree/master/lucene/analysis/common/src/java/org/apache/lucene/analysis/en
-     -->
+<!ENTITY deal_with_english_possives_in_absense_of_stemming '
+<filter class="solr.EnglishPossessiveFilterFactory"/>
+'>
 
-    <!ENTITY stem_with_porter_stemmer '
-    <filter class="solr.PorterStemFilterFactory"/>
-    '>
+<!-- (De)duplication and Synonyms  -->
 
-    <!ENTITY stem_with_kstemmer '
-    <filter class="solr.KStemFilterFactory"/>
-    '>
 
-    <!ENTITY deal_with_english_possives_in_absense_of_stemming '
-    <filter class="solr.EnglishPossessiveFilterFactory"/>
-    '>
+<!ENTITY overlay_keyword_token_copies_for_later_processing '
+<filter class="solr.KeywordRepeatFilterFactory"/>
+'>
 
-    <!-- (De)duplication and Synonyms  -->
 
+<!ENTITY remove_duplicates_at_same_position '
+<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+'>
 
-    <!ENTITY overlay_keyword_token_copies_for_later_processing '
-    <filter class="solr.KeywordRepeatFilterFactory"/>
-    '>
+<!ENTITY expand_state_abbreviations '
+<filter class="solr.SynonymGraphFilterFactory" synonyms="schema/state_abbreviations.txt" ignoreCase="false"
+        expand="true"/>
+'>
 
+<!ENTITY expand_synonyms_at_query_time_must_come_before_overlay_or_stemming '
+<filter class="solr.SynonymGraphFilterFactory" synonyms="schema/synonyms.txt" ignoreCase="true" expand="true"/>
 
-    <!ENTITY remove_duplicates_at_same_position '
-    <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
-    '>
+'>
 
-    <!ENTITY expand_state_abbreviations '
-    <filter class="solr.SynonymGraphFilterFactory" synonyms="schema/state_abbreviations.txt" ignoreCase="false" expand="true"/>
-    '>
+<!ENTITY english_plural_to_singular '
+<filter class="solr.EnglishMinimalStemFilterFactory"/>
+'>
 
-    <!ENTITY expand_synonyms_at_query_time_must_come_before_overlay_or_stemming '
-    <filter class="solr.SynonymGraphFilterFactory" synonyms="schema/synonyms.txt" ignoreCase="true" expand="true"/>
+<!ENTITY remove_english_posessives '
+<filter class="solr.EnglishPossessiveFilterFactory"/>
+'>
+<!-- Normalization and case folding -->
 
-    '>
+<!ENTITY try_to_deal_with_cjk '
+<filter class="solr.CJKWidthFilterFactory"/>
+<filter class="solr.CJKBigramFilterFactory"
+        han="true" hiragana="true  "
+        katakana="false" hangul="false"
+        outputUnigrams="false"
+/>
+<filter class="solr.FixBrokenOffsetsFilterFactory"/>
+'>
 
-    <!ENTITY english_plural_to_singular '
-    <filter class="solr.EnglishMinimalStemFilterFactory"/>
-    '>
+<!--<!ENTITY try_to_parse_callnumber '-->
+<!--  &remove_punctuation_next_to_a_space;-->
+<!--  <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>-->
+<!--  &trim_leading_whitespace_and_punctuation;-->
+<!--  &trim_trailing_whitespace_and_punctuation;-->
+<!--  &remove_punctuation_next_to_a_space;-->
+<!--  &icu_case_folding_and_normalization;-->
+<!--'>-->
 
-    <!ENTITY remove_english_posessives '
-    <filter class="solr.EnglishPossessiveFilterFactory"/>
-    '>
-    <!-- Normalization and case folding -->
 
-    <!ENTITY try_to_deal_with_cjk '
-    <filter class="solr.CJKWidthFilterFactory"/>
-    <filter class="solr.CJKBigramFilterFactory"
-    han="true" hiragana="true  "
-    katakana="false" hangul="false"
-    outputUnigrams="false"
-    />
-    <filter class="solr.FixBrokenOffsetsFilterFactory"/>
-    '>
+<!ENTITY pre_tokenization_case_folding '
+<charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
+'>
 
-    <!--<!ENTITY try_to_parse_callnumber '-->
-    <!--  &remove_punctuation_next_to_a_space;-->
-    <!--  <filter class="edu.umich.lib.solr_filters.LCCallNumberNormalizerFilterFactory"/>-->
-    <!--  &trim_leading_whitespace_and_punctuation;-->
-    <!--  &trim_trailing_whitespace_and_punctuation;-->
-    <!--  &remove_punctuation_next_to_a_space;-->
-    <!--  &icu_case_folding_and_normalization;-->
-    <!--'>-->
+<!ENTITY icu_case_folding_and_normalization '
+<filter class="solr.ICUFoldingFilterFactory"/>
+'>
 
+<!ENTITY icu_downcase '
+<filter class="solr.ICUTransformFilterFactory" id="Any-Lower"/>
+'>
 
+<!ENTITY keyword_aware_icu_normalization '
+<filter class="edu.umich.lib.solr_filters.KeywordAwareICUFoldingFilterFactory"/>
+'>
 
-    <!ENTITY pre_tokenization_case_folding '
-    <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
-    '>
+<!-- Tokenizing -->
+<!ENTITY tokenize_with_icu '
+<tokenizer class="solr.ICUTokenizerFactory"/>
+'>
 
-    <!ENTITY icu_case_folding_and_normalization '
-    <filter class="solr.ICUFoldingFilterFactory"/>
-    '>
+<!ENTITY tokenize_on_slash '
+<tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/"/>
+'>
 
-    <!ENTITY icu_downcase '
-    <filter class="solr.ICUTransformFilterFactory" id="Any-Lower"/>
-    '>
+<!ENTITY tokenize_into_one_big_token '
+<tokenizer class="solr.KeywordTokenizerFactory"/>
+'>
 
-    <!ENTITY keyword_aware_icu_normalization '
-    <filter class="edu.umich.lib.solr_filters.KeywordAwareICUFoldingFilterFactory"/>
-    '>
 
-    <!-- Tokenizing -->
-    <!ENTITY tokenize_with_icu '
-    <tokenizer class="solr.ICUTokenizerFactory"/>
-    '>
+<!-- Some useful repeated chains -->
 
-    <!ENTITY tokenize_on_slash '
-    <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/"/>
-    '>
 
-    <!ENTITY tokenize_into_one_big_token '
-    <tokenizer class="solr.KeywordTokenizerFactory"/>
-    '>
+<!ENTITY standard_tokenization '
+&pre_tokenization_character_substitution;
+&tokenize_with_icu;
+&cleanup;
+&normalize_numeric_digits;
+'>
 
+<!ENTITY standard_single_token_tokenizer '
+&pre_tokenization_character_substitution;
+&tokenize_into_one_big_token;
+&cleanup;
+&normalize_numeric_digits;
+'>
 
-    <!-- Some useful repeated chains -->
+]>
 
 
-    <!ENTITY standard_tokenization '
-    &pre_tokenization_character_substitution;
-    &tokenize_with_icu;
-    &cleanup;
-    &normalize_numeric_digits;
-    '>
-
-    <!ENTITY standard_single_token_tokenizer '
-    &pre_tokenization_character_substitution;
-    &tokenize_into_one_big_token;
-    &cleanup;
-    &normalize_numeric_digits;
-    '>
-
-    ]>
-
-
-    <schema name="library_solr_config" version="1.6">
+<schema name="library_solr_config" version="1.6">
     <!-- attribute "name" is the name of this schema and is only used for display purposes.
          version="x.y" is Solr's version number for the schema syntax and
          semantics.  It should not normally be changed by applications.
@@ -307,32 +305,32 @@
     -->
 
     <fieldType name="text" class="solr.TextField"
-    positionIncrementGap="&pig;">
-    <analyzer type="index">
-    &standard_tokenization;
-    &expand_state_abbreviations;
-    &cleanup;
-    &icu_downcase;
-    &stem; <!-- Wait!!! Esty thinks maybe this should go after overlay -->
-    &overlay_keyword_token_copies_for_later_processing;
-    &remove_english_posessives;
-    &keyword_aware_icu_normalization;
-    &try_to_deal_with_cjk;
-    &remove_duplicates_at_same_position;
-    </analyzer>
-    <analyzer type="query">
-    &standard_tokenization;
-    &expand_state_abbreviations;
-    &cleanup;
-    &icu_downcase;
-    &expand_synonyms_at_query_time_must_come_before_overlay_or_stemming;
-    &stem;
-    &overlay_keyword_token_copies_for_later_processing;
-    &remove_english_posessives;
-    &keyword_aware_icu_normalization;
-    &try_to_deal_with_cjk;
-    &remove_duplicates_at_same_position;
-    </analyzer>
+               positionIncrementGap="&pig;">
+        <analyzer type="index">
+            &standard_tokenization;
+            &expand_state_abbreviations;
+            &cleanup;
+            &icu_downcase;
+            &stem; <!-- Wait!!! Esty thinks maybe this should go after overlay -->
+            &overlay_keyword_token_copies_for_later_processing;
+            &remove_english_posessives;
+            &keyword_aware_icu_normalization;
+            &try_to_deal_with_cjk;
+            &remove_duplicates_at_same_position;
+        </analyzer>
+        <analyzer type="query">
+            &standard_tokenization;
+            &expand_state_abbreviations;
+            &cleanup;
+            &icu_downcase;
+            &expand_synonyms_at_query_time_must_come_before_overlay_or_stemming;
+            &stem;
+            &overlay_keyword_token_copies_for_later_processing;
+            &remove_english_posessives;
+            &keyword_aware_icu_normalization;
+            &try_to_deal_with_cjk;
+            &remove_duplicates_at_same_position;
+        </analyzer>
     </fieldType>
 
     <!--
@@ -345,66 +343,66 @@
 -->
     <!-- Without stemming or synonyms is basically the same thing -->
     <fieldType name="text_no_stem_or_synonyms" class="solr.TextField"
-    positionIncrementGap="&pig;">
-    <analyzer>
-    &standard_tokenization;
-    &overlay_keyword_token_copies_for_later_processing;
-    &remove_english_posessives;
-    &keyword_aware_icu_normalization;
-    &try_to_deal_with_cjk;
-    &remove_duplicates_at_same_position;
-    </analyzer>
+               positionIncrementGap="&pig;">
+        <analyzer>
+            &standard_tokenization;
+            &overlay_keyword_token_copies_for_later_processing;
+            &remove_english_posessives;
+            &keyword_aware_icu_normalization;
+            &try_to_deal_with_cjk;
+            &remove_duplicates_at_same_position;
+        </analyzer>
     </fieldType>
 
 
     <fieldType name="fully_anchored" class="solr.TextField"
-    positionIncrementGap="&pig;" multiValued="true">
-    <analyzer>
-    &less_aggressive_pre_tokenization_character_substitution;
-    &tokenize_with_icu;
-    &cleanup;
-    &spaceify_dash_and_colon;
-    &deal_with_english_possives_in_absense_of_stemming;
-    &remove_all_punctuation;
-    &icu_case_folding_and_normalization;
-    &remove_duplicates_at_same_position;
-    <filter class="edu.umich.lib.solr_filters.AnchoredSearchFilterFactory"/>
-    &remove_duplicates_at_same_position;
-    </analyzer>
+               positionIncrementGap="&pig;" multiValued="true">
+        <analyzer>
+            &less_aggressive_pre_tokenization_character_substitution;
+            &tokenize_with_icu;
+            &cleanup;
+            &spaceify_dash_and_colon;
+            &deal_with_english_possives_in_absense_of_stemming;
+            &remove_all_punctuation;
+            &icu_case_folding_and_normalization;
+            &remove_duplicates_at_same_position;
+            <filter class="edu.umich.lib.solr_filters.AnchoredSearchFilterFactory"/>
+            &remove_duplicates_at_same_position;
+        </analyzer>
     </fieldType>
 
     <fieldType name="text_leftanchored" class="solr.TextField"
-    positionIncrementGap="&pig;">
-    <analyzer>
-    &less_aggressive_pre_tokenization_character_substitution;
-    &tokenize_with_icu;
-    &cleanup;
-    &spaceify_dash_and_colon;
-    &deal_with_english_possives_in_absense_of_stemming;
-    &remove_all_punctuation;
-    &icu_downcase;
-    &overlay_keyword_token_copies_for_later_processing;
-    &keyword_aware_icu_normalization;
-    &remove_duplicates_at_same_position;
-    <filter class="edu.umich.lib.solr_filters.LeftAnchoredSearchFilterFactory"/>
-    </analyzer>
+               positionIncrementGap="&pig;">
+        <analyzer>
+            &less_aggressive_pre_tokenization_character_substitution;
+            &tokenize_with_icu;
+            &cleanup;
+            &spaceify_dash_and_colon;
+            &deal_with_english_possives_in_absense_of_stemming;
+            &remove_all_punctuation;
+            &icu_downcase;
+            &overlay_keyword_token_copies_for_later_processing;
+            &keyword_aware_icu_normalization;
+            &remove_duplicates_at_same_position;
+            <filter class="edu.umich.lib.solr_filters.LeftAnchoredSearchFilterFactory"/>
+        </analyzer>
     </fieldType>
 
     <!-- A single token, ascii-ified and downcased -->
 
     <fieldType name="folded_single_token" class="solr.TextField" positionIncrementGap="&pig;">
-    <analyzer>
-    &standard_single_token_tokenizer;
-    &icu_case_folding_and_normalization;
-    </analyzer>
+        <analyzer>
+            &standard_single_token_tokenizer;
+            &icu_case_folding_and_normalization;
+        </analyzer>
     </fieldType>
 
     <fieldType name="folded_single_char" class="solr.TextField" positionIncrementGap="&pig;">
-    <analyzer>
-    &standard_single_token_tokenizer;
-    &icu_case_folding_and_normalization;
-    <filter class="solr.LengthFilterFactory" min="1" max="1" />
-    </analyzer>
+        <analyzer>
+            &standard_single_token_tokenizer;
+            &icu_case_folding_and_normalization;
+            <filter class="solr.LengthFilterFactory" min="1" max="1"/>
+        </analyzer>
     </fieldType>
 
 
@@ -426,23 +424,23 @@
 		 values (A,B,...,Z,0-9,Other)
 		-->
 
-    <fieldType name="title_initial_type"  class="solr.TextField" positionIncrementGap="&pig;">
-    <analyzer type="index">
-    &standard_single_token_tokenizer;
-    &cleanup;
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="^(.).*$" replacement="$1"/>
-    &icu_case_folding_and_normalization;
-    <filter class="solr.ICUTransformFilterFactory" id="Cyrillic-Latin"/>
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="^[^a-z0-9]" replacement="other"/>
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="^\d" replacement="0-9"/>
-    </analyzer>
-    <analyzer type="query">
-    &standard_single_token_tokenizer;
-    &icu_case_folding_and_normalization;
-    </analyzer>
+    <fieldType name="title_initial_type" class="solr.TextField" positionIncrementGap="&pig;">
+        <analyzer type="index">
+            &standard_single_token_tokenizer;
+            &cleanup;
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="^(.).*$" replacement="$1"/>
+            &icu_case_folding_and_normalization;
+            <filter class="solr.ICUTransformFilterFactory" id="Cyrillic-Latin"/>
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="^[^a-z0-9]" replacement="other"/>
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="^\d" replacement="0-9"/>
+        </analyzer>
+        <analyzer type="query">
+            &standard_single_token_tokenizer;
+            &icu_case_folding_and_normalization;
+        </analyzer>
     </fieldType>
     <!--
         field type: exactishSort
@@ -453,28 +451,28 @@
     -->
 
     <fieldType name="exactishSort" class="solr.TextField"
-    positionIncrementGap="&pig;">
-    <analyzer>
-    &less_aggressive_pre_tokenization_character_substitution;
-    &standard_single_token_tokenizer;
-    &spaceify_dash_and_colon;
-    &remove_all_punctuation;
-    &icu_case_folding_and_normalization;
-    &try_to_deal_with_cjk;
-    &remove_duplicates_at_same_position;
-    <!-- Left-pad numbers with zeroes -->
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="(\d+)" replacement="00000$1" replace="all"
-    />
-    <!-- Left-trim zeroes to produce 6 digit numbers -->
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="0*([0-9]{6,})" replacement="$1" replace="all"
-    />
-    <!-- squeeze multiple spaces to 1 -->
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="\s\s+" replacement=" " replace="all"
-    />
-    </analyzer>
+               positionIncrementGap="&pig;">
+        <analyzer>
+            &less_aggressive_pre_tokenization_character_substitution;
+            &standard_single_token_tokenizer;
+            &spaceify_dash_and_colon;
+            &remove_all_punctuation;
+            &icu_case_folding_and_normalization;
+            &try_to_deal_with_cjk;
+            &remove_duplicates_at_same_position;
+            <!-- Left-pad numbers with zeroes -->
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="(\d+)" replacement="00000$1" replace="all"
+            />
+            <!-- Left-trim zeroes to produce 6 digit numbers -->
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="0*([0-9]{6,})" replacement="$1" replace="all"
+            />
+            <!-- squeeze multiple spaces to 1 -->
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="\s\s+" replacement=" " replace="all"
+            />
+        </analyzer>
     </fieldType>
 
 
@@ -488,46 +486,46 @@
     -->
 
     <fieldType name="exactish" class="solr.TextField"
-    positionIncrementGap="&pig;">
-    <analyzer>
-    &less_aggressive_pre_tokenization_character_substitution;
-    &standard_single_token_tokenizer;
-    &spaceify_dash_and_colon;
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="'s\b" replacement="" replace="all"
-    />
-    &remove_all_punctuation;
-    &overlay_keyword_token_copies_for_later_processing;
-    &keyword_aware_icu_normalization;
-    &try_to_deal_with_cjk;
-    &remove_duplicates_at_same_position;
-    </analyzer>
+               positionIncrementGap="&pig;">
+        <analyzer>
+            &less_aggressive_pre_tokenization_character_substitution;
+            &standard_single_token_tokenizer;
+            &spaceify_dash_and_colon;
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="'s\b" replacement="" replace="all"
+            />
+            &remove_all_punctuation;
+            &overlay_keyword_token_copies_for_later_processing;
+            &keyword_aware_icu_normalization;
+            &try_to_deal_with_cjk;
+            &remove_duplicates_at_same_position;
+        </analyzer>
     </fieldType>
 
     <fieldType name="lc_subject" class="solr.TextField"
-    positionIncrementGap="&pig;">
-    <analyzer>
-    &standard_single_token_tokenizer;
-    &remove_all_punctuation;
-    &icu_downcase;
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="\s+" replacement=" " replace="all"
-    />
-    </analyzer>
+               positionIncrementGap="&pig;">
+        <analyzer>
+            &standard_single_token_tokenizer;
+            &remove_all_punctuation;
+            &icu_downcase;
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="\s+" replacement=" " replace="all"
+            />
+        </analyzer>
     </fieldType>
 
     <fieldType name="lc_subject_sort" class="solr.TextField"
-    positionIncrementGap="&pig;">
-    <analyzer>
-    &standard_single_token_tokenizer;
-    &icu_downcase;
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="\s*--\s*" replacement="|" replace="all"
-    />
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="[^\P{P}|]" replacement="" replace="all"
-    />
-    </analyzer>
+               positionIncrementGap="&pig;">
+        <analyzer>
+            &standard_single_token_tokenizer;
+            &icu_downcase;
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="\s*--\s*" replacement="|" replace="all"
+            />
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="[^\P{P}|]" replacement="" replace="all"
+            />
+        </analyzer>
     </fieldType>
 
 
@@ -541,11 +539,11 @@
     -->
 
     <fieldType name="text_facet" class="solr.TextField">
-    <analyzer>
-    &tokenize_into_one_big_token;
-    &normalize_numeric_digits;
-    &cleanup;
-    </analyzer>
+        <analyzer>
+            &tokenize_into_one_big_token;
+            &normalize_numeric_digits;
+            &cleanup;
+        </analyzer>
     </fieldType>
 
     <!--  =============================================================
@@ -553,52 +551,55 @@
     ============================================================== -->
 
     <fieldType name="isbn" class="solr.TextField">
-    <analyzer>
-    &tokenize_into_one_big_token;
-    &normalize_numeric_digits;
-    &cleanup;
-    <filter class="edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory"/>
-    &remove_duplicates_at_same_position;
-    <filter class="solr.LengthFilterFactory" min="13" max="13" />
-    </analyzer>
+        <analyzer>
+            &tokenize_into_one_big_token;
+            &normalize_numeric_digits;
+            &cleanup;
+            <filter class="edu.umich.lib.solr_filters.ISBNNormalizerFilterFactory"/>
+            &remove_duplicates_at_same_position;
+            <filter class="solr.LengthFilterFactory" min="13" max="13"/>
+        </analyzer>
     </fieldType>
 
 
     <fieldType name="lccn" class="solr.TextField">
-    <analyzer>
-    &tokenize_into_one_big_token;
-    &normalize_numeric_digits;
-    &cleanup;
-    <filter class="edu.umich.lib.solr_filters.LCCNNormalizerFilterFactory"/>
-    </analyzer>
+        <analyzer>
+            &tokenize_into_one_big_token;
+            &normalize_numeric_digits;
+            &cleanup;
+            <filter class="edu.umich.lib.solr_filters.LCCNNormalizerFilterFactory"/>
+        </analyzer>
     </fieldType>
 
 
     <fieldType name="lc_callnumber_simple" class="solr.TextField">
-    <analyzer>
-    <tokenizer class="solr.KeywordTokenizerFactory"/>
-    <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"/>
-    </analyzer>
+        <analyzer>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"/>
+        </analyzer>
     </fieldType>
 
     <fieldType name="lc_callnumber_simple_passthrough" class="solr.TextField">
-    <analyzer>
-    <tokenizer class="solr.KeywordTokenizerFactory"/>
-    <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory" allowInvalid="true"/>
-    </analyzer>
+        <analyzer>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"
+                    allowInvalid="true"/>
+        </analyzer>
     </fieldType>
 
 
     <fieldType name="lc_callnumber_simple_searchable" class="solr.TextField">
-    <analyzer type="index">
-    <tokenizer class="solr.KeywordTokenizerFactory"/>
-    <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory" allowInvalid="true"/>
-    <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>
-    </analyzer>
-    <analyzer type="query">
-    <tokenizer class="solr.KeywordTokenizerFactory"/>
-    <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory" allowInvalid="true"/>
-    </analyzer>
+        <analyzer type="index">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"
+                    allowInvalid="true"/>
+            <filter class="solr.EdgeNGramFilterFactory" maxGramSize="40" minGramSize="2"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="edu.umich.library.library_identifier.solrFilter.LCCallNumberSimpleFilterFactory"
+                    allowInvalid="true"/>
+        </analyzer>
     </fieldType>
 
 
@@ -622,26 +623,25 @@
     <!--    </fieldType>-->
 
 
-
     <fieldType name="oclc" class="solr.TextField">
-    <analyzer>
-    &tokenize_into_one_big_token;
-    &normalize_numeric_digits;
-    &remove_all_non_numbers;
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="^[^\p{N}]*0*(\p{N}+).*$" replacement="$1"/>
-    </analyzer>
+        <analyzer>
+            &tokenize_into_one_big_token;
+            &normalize_numeric_digits;
+            &remove_all_non_numbers;
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="^[^\p{N}]*0*(\p{N}+).*$" replacement="$1"/>
+        </analyzer>
     </fieldType>
 
     <!-- Remove all non-numbers except Xx, lowercase, and only accept if the result is 8 chars -->
     <fieldType name="issn" class="solr.TextField">
-    <analyzer>
-    &tokenize_into_one_big_token;
-    &normalize_numeric_digits;
-    &remove_all_non_issn_chars;
-    <filter class="solr.LowerCaseFilterFactory"/>
-    <filter class="solr.LengthFilterFactory" min="8" max="8"/>
-    </analyzer>
+        <analyzer>
+            &tokenize_into_one_big_token;
+            &normalize_numeric_digits;
+            &remove_all_non_issn_chars;
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.LengthFilterFactory" min="8" max="8"/>
+        </analyzer>
     </fieldType>
 
 
@@ -650,29 +650,28 @@
     ============================================================== -->
 
     <fieldType name="numericID" class="solr.TextField" positionIncrementGap="1000" omitNorms="true">
-    <analyzer>
-    <tokenizer class="solr.KeywordTokenizerFactory"/>
-    <filter class="solr.TrimFilterFactory"/>
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="^.*?(\p{N}[\p{N}\-\.]{6,}[xX]?).*$" replacement="***$1"/>
-    <filter class="solr.PatternReplaceFilterFactory" pattern="^[^\*].*$" replacement=""/>
-    <filter class="solr.PatternReplaceFilterFactory" pattern="^\*\*\*" replacement=""/>
-    <filter class="solr.LowerCaseFilterFactory"/>
-    <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}x]" replacement="" replace="all"/>
-    <filter class="solr.LengthFilterFactory" min="8" max="14"/>
-    </analyzer>
+        <analyzer>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="solr.TrimFilterFactory"/>
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="^.*?(\p{N}[\p{N}\-\.]{6,}[xX]?).*$" replacement="***$1"/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^[^\*].*$" replacement=""/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^\*\*\*" replacement=""/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{N}x]" replacement="" replace="all"/>
+            <filter class="solr.LengthFilterFactory" min="8" max="14"/>
+        </analyzer>
     </fieldType>
 
 
     <fieldType name="integer_no_leading_zeros" class="solr.TextField" positionIncrementGap="1000" omitNorms="true">
-    <analyzer>
-    <tokenizer class="solr.KeywordTokenizerFactory"/>
-    <filter class="solr.TrimFilterFactory"/>
-    <filter class="solr.PatternReplaceFilterFactory"
-    pattern="^[^\p{N}]*0*(\p{N}+).*$" replacement="$1"/>
-    </analyzer>
+        <analyzer>
+            <tokenizer class="solr.KeywordTokenizerFactory"/>
+            <filter class="solr.TrimFilterFactory"/>
+            <filter class="solr.PatternReplaceFilterFactory"
+                    pattern="^[^\p{N}]*0*(\p{N}+).*$" replacement="$1"/>
+        </analyzer>
     </fieldType>
-
 
 
     <!-- Valid attributes for fields:
@@ -712,20 +711,20 @@
 
 
     <similarity
-    class="org.apache.lucene.search.similarities.BM25Similarity"/>
+            class="org.apache.lucene.search.similarities.BM25Similarity"/>
 
 
     <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
        or Solr won't start. _version_ and update log are required for SolrCloud
     -->
     <field name="_version_" type="long" indexed="true" stored="false"
-    multiValued="false"/>
+           multiValued="false"/>
 
     <!-- points to the root document of a block of nested documents. Required for nested
        document support, may be removed otherwise
     -->
     <field name="_root_" type="string" indexed="true" stored="false"
-    docValues="false"/>
+           docValues="false"/>
 
     <!-- Only remove the "id" field if you have a very good reason to. While not strictly
       required, it is highly recommended. A <uniqueKey> is present in almost all Solr
@@ -737,8 +736,8 @@
       tokens
     -->
     <field name="id" type="&id_type;" indexed="true" stored="&id_stored;"
-    required="true"
-    multiValued="false"/>
+           required="true"
+           multiValued="false"/>
 
     <field name="tla" type="text_leftanchored" indexed="true" stored="true"/>
     <field name="t" type="text" indexed="true" stored="true"/>
@@ -747,17 +746,10 @@
     <copyField source="t" dest="e"/>
 
 
-
-
-
-
-
-
-
     <!-- Field to use to determine and enforce document uniqueness.
          Unless this field is marked with required="false", it will be a required field
       -->
     <uniqueKey>id</uniqueKey>
 
 
-    </schema>
+</schema>
