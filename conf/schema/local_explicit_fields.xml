@@ -99,6 +99,7 @@
 <field name="publisher"    type="text_no_stem_or_synonyms" indexed="true" stored="true" multiValued="true"/>
 <field name="edition"      type="string"     indexed="true" stored="true" multiValued="true"/>
 <field name="cat_date"     type="int"       indexed="true" stored="true" multiValued="false"/>
+<field name="date_added"   type="int"       indexed="true" stored="true" multiValued="false"/>
 
 
     <!-- Author fields -->
