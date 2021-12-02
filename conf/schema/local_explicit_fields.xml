@@ -13,5 +13,5 @@
 
 
 
-<field name="callnumber" type="lc_callnumber_strict" stored="true" indexed="false"/>
-<field name="bib_id" type="string" stored="true" indexed="true"/>
+<field name="callnumber" type="lc_callnumber_strict" stored="true" indexed="false" multiValued="false"/>
+<field name="bib_id" type="string" stored="true" indexed="true" multiValued="false"/>
