@@ -103,7 +103,7 @@
 <field name="cat_date"     type="int"       indexed="true" stored="true" multiValued="false"/>
 <field name="preferred_citation"     type="string"       indexed="true" stored="true" multiValued="false"/>
 <field name="location_of_originals"     type="string"       indexed="true" stored="true" multiValued="true"/>
-<field name="funding_information"     type="string"       indexed="true" stored="true" multiValued="false"/>
+<field name="funding_information"     type="string"       indexed="true" stored="true" multiValued="true"/>
 <field name="source_of_acquisition"     type="string"       indexed="true" stored="true" multiValued="false"/>
 <field name="map_scale"     type="string"       indexed="true" stored="true" multiValued="true"/>
 
